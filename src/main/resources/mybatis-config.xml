@@ -3,17 +3,19 @@
         PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
-	<!--  
+	<!-- 通过logImpl属性指定使用LOG4J输出日志 -->
 	<settings>
 		<setting name="logImpl" value="LOG4J" />
 	</settings>
-	-->
 	
-	<!--  
+	
+	<!-- typeAliases元素下配置了一个包的别名,通常确定一个类的时候需要使用全限定名,
+		比如 com.artisan.mybatis.simple.model.Country
+	-->
 	<typeAliases>
 		<package name="com.artisan.mybatis.simple.model" />
 	</typeAliases>
-	-->
+	
 	
 	<environments default="development">
 		<environment id="development">
