@@ -4,7 +4,7 @@
 <mapper namespace="com.artisan.mybatis.simple.mapper.CountryMapper">
 	
 	<!-- select节点 -->
-	<select id="selectAll" resultType="com.artisan.mybatis.simple.model.Country">
+	<select id="selectAll" resultType="Country">
 		select id,countryname,countrycode from country
 	</select>
 </mapper>

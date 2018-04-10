@@ -10,7 +10,7 @@
 	
 	
 	<!-- typeAliases元素下配置了一个包的别名,通常确定一个类的时候需要使用全限定名,
-		比如 com.artisan.mybatis.simple.model.Country
+		比如 com.artisan.mybatis.simple.mapper.model.Country
 	-->
 	<typeAliases>
 		<package name="com.artisan.mybatis.simple.model" />

@@ -9,6 +9,7 @@ import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,9 +17,9 @@ import org.junit.Test;
 import com.artisan.mybatis.simple.model.Country;
 
 public class CountryMapperTest {
-
-	static SqlSessionFactory sessionFactory;
-	SqlSession sqlSession;
+	private Logger logger = Logger.getLogger(CountryMapperTest.class);
+	private static SqlSessionFactory sessionFactory;
+	private SqlSession sqlSession;
 
 	@Before
 	public void init() {
@@ -39,8 +40,9 @@ public class CountryMapperTest {
 		sqlSession = sessionFactory.openSession();
 		// 使用sqlSession 操作数据库
 		List<Country> countryList = sqlSession.selectList("com.artisan.mybatis.simple.mapper.CountryMapper.selectAll");
-
-		System.out.println(countryList);
+		for (Country country : countryList) {
+			logger.info(country);
+		}
 
 	}
 
