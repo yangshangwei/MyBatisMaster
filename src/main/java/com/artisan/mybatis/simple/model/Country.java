@@ -13,15 +13,19 @@ package com.artisan.mybatis.simple.model;
  */
 public class Country {
 
-	private int id;
+	/**
+	 * 由于java中的基本类型会有默认值,某些情况下动态sql无法实现null的情况,因此实体类中不建议使用基本类型
+	 */
+	private Long id;
 	private String countryname;
 	private String countrycode;
 
-	public int getId() {
+
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

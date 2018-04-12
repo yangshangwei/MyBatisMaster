@@ -46,7 +46,7 @@ public class CountryInfoByJdbc {
 			// 遍历查询结果
 			while (resultSet.next()) {
 				Country country = new Country();
-				country.setId(Integer.parseInt(resultSet.getString("id")));
+				country.setId(Long.valueOf(resultSet.getString("id")));
 				country.setCountryname(resultSet.getString("countryname"));
 				country.setCountrycode(resultSet.getString("countrycode"));
 				logger.info("通过jdbc获取的结果：" + country);
