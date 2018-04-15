@@ -3,7 +3,12 @@
         PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
-	<!-- 通过logImpl属性指定使用LOG4J输出日志 -->
+
+
+	<!-- 引入外部属性文件 ,必须放在第一位-->
+	<properties resource="db_mysql.properties"/>
+
+	<!-- 通过logImpl属性指定使用LOG4J输出日志,mybatis默认使用log4j作为输出日志信息。 -->
 	<settings>
 		<setting name="logImpl" value="LOG4J" />
 	</settings>
@@ -16,20 +21,25 @@
 		<package name="com.artisan.mybatis.simple.model" />
 	</typeAliases>
 	
-	
+	<!-- 和spring整合后 environments配置将废除-->
 	<environments default="development">
 		<environment id="development">
+			<!-- 使用jdbc事务管理-->
 			<transactionManager type="JDBC"/>
+			<!-- 数据库连接池-->
 			<dataSource type="UNPOOLED">
-				<property name="driver" value="com.mysql.jdbc.Driver" />
-				<property name="url" value="jdbc:mysql://127.0.0.1:3306/artisan" />
-				<property name="username" value="root" />
-				<property name="password" value="root" />
+				<property name="driver" value="${jdbc.driver}" />
+				<property name="url" value="${jdbc.url}" />
+				<property name="username" value="${jdbc.username}" />
+				<property name="password" value="${jdbc.password}" />
 			</dataSource>
 		</environment>
 	</environments>
 
 	<mappers>
+		<!-- 配置具体的mapper -->
 		<mapper resource="com/artisan/mybatis/simple/mapper/CountryMapper.xml" />
+		<!-- 通过包的方式配置，mybatis会先查找对应包下的所有的接口 -->
+		<package name="com.artisan.mybatis.xml.mapper"/>
 	</mappers>
 </configuration>
