@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+					"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<!-- 当Mapper接口和XML文件关联的时候， namespace的值就需要配置成接口的全限定名称 -->
+<mapper namespace="com.artisan.mybatis.xml.mapper.UserMapper">
+
+	<!-- 通过resultMap标签配置Java对象和查询结果列的对应关系 -->
+	<resultMap id="userMap" 
+			   type="com.artisan.mybatis.xml.domain.SysUser">
+		<id column="id" property="id" />
+		<result property="userName" column="user_name" />
+		<result property="userPassword" column="user_password" />
+		<result property="userEmail" column="user_email" />
+		<result property="userInfo" column="user_info" />
+		<result property="headImg" column="head_img" jdbcType="BLOB" />
+		<result property="createTime" column="create_time" jdbcType="TIMESTAMP" />
+	</resultMap>
+	
+	<!-- 通过ID查询系统用户 -->
+	<select id="selectSysUserById" parameterType="Long" resultMap="userMap">
+		select
+			a.id,
+			a.user_name,
+			a.user_password,
+			a.user_email,
+			a.user_info,
+			a.head_img,
+			a.create_time
+		from
+			sys_user a
+		where id = #{id}
+	</select>
+	
+	
+	
+	<!-- 通过全部的系统用户 -->
+	<select id="selectAll" resultType="com.artisan.mybatis.xml.domain.SysUser">
+		select
+			a.id id,
+			a.user_name userName,
+			a.user_password userPassword,
+			a.user_email userEmail,
+			a.user_info userInfo,
+			a.head_img headImg,
+			a.create_time createTime
+		from
+			sys_user a
+	</select>
+
+
+
+	<!-- 
+		
+		在数据库中，由于大部分数据库设置不区分大小写，一次下画线方式的命名很常见，比如user_name, user_email .
+		 在Java中，一般都是用驼峰式命名，比如userName,userEmail 
+		 
+		因为数据库和Java中的这两种命名方式很常见，为此Mybatis提供了一个全局属性mapUnderscoreToCamelCase，
+		通过配置这个属性为true可以自动将下画线方式命名的数据库列映射到java对象驼峰式命名属性中。 
+		这个属性默认为false，若想使用，需要在mybatis全局配置文件中增加如下配置 -->
+	
+	<!-- 通过ID查询系统用户 ,配合mapUnderscoreToCamelCase设置为true -->
+	<select id="selectUserByIdUseMapUnderscoreToCamelCase" parameterType="Long" 
+			resultType="com.artisan.mybatis.xml.domain.SysUser">
+		select
+			a.id,
+			a.user_name,
+			a.user_password,
+			a.user_email,
+			a.user_info,
+			a.head_img,
+			a.create_time
+		from
+			sys_user a
+		where id = #{id}
+	</select>
+		
+		
+		
+	<!-- 根据用户ID查询用户角色 -->
+	<select id="selectRoleListByUserId" parameterType="Long"  resultType="com.artisan.mybatis.xml.domain.SysRole">
+		SELECT
+			c.id,
+			c.role_name roleName,
+			c.enabled,
+			c.create_by createBy,
+			c.create_time createTime
+		FROM
+			 sys_user a
+		JOIN sys_user_role b ON a.id = b.user_id
+		JOIN sys_role c ON b.role_id = c.id
+		WHERE
+			a.id = #{userId}
+	</select>
+	
+	<!-- 根据用户ID查询用户角色 ,增加sys_user中的部分字段 -->
+	<select id="selectRoleListByUserIdMoreInfo" parameterType="Long"  resultType="com.artisan.mybatis.xml.domain.SysRole">
+		SELECT
+			c.id,
+			c.role_name roleName,
+			c.enabled,
+			c.create_by createBy,
+			c.create_time createTime,
+			a.user_name as 'user.userName',
+			a.user_email as 'user.userEmail'
+		FROM
+			 sys_user a
+		JOIN sys_user_role b ON a.id = b.user_id
+		JOIN sys_role c ON b.role_id = c.id
+		WHERE
+			a.id = #{userId}
+	</select>
+	
+</mapper>					
