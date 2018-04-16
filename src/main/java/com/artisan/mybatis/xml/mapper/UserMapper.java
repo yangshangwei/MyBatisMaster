@@ -63,7 +63,7 @@ public interface UserMapper {
 	 * @param sysUser
 	 * @return
 	 * 
-	 * @return: int 受影响的行数
+	 * @return: int 受影响的行数 ，这里仅仅是为了做记录，void在实际业务中更常用
 	 */
 	int insertSysUser(SysUser sysUser);
 
@@ -72,4 +72,18 @@ public interface UserMapper {
 
 	// 演示使用selectKey的方式返回主键的自增长值
 	int insertSysUser3(SysUser sysUser);
+
+	/**
+	 * 
+	 * 
+	 * @Title: updateSysUserById
+	 * 
+	 * @Description: 修改SysUser
+	 * 
+	 * @param sysUser
+	 * @return
+	 * 
+	 * @return: int 受影响的行数,这里仅仅是为了做记录，void在实际业务中更常用
+	 */
+	int updateSysUserById(SysUser sysUser);
 }

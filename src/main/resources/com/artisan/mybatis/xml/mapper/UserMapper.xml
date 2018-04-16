@@ -134,7 +134,7 @@
 	</insert>
 	
 	
-		<!-- 添加SysUser 使用selectKey的方式返回自增长的主键的值-->
+	<!-- 添加SysUser 使用selectKey的方式返回自增长的主键的值-->
 	<insert id="insertSysUser3">
 		insert into sys_user(
 			user_name, user_password, user_email, 
@@ -146,9 +146,19 @@
 		<selectKey keyColumn="id" resultType="long" keyProperty="id"  order="AFTER">
 			select last_insert_id()
 		</selectKey>
-		
-		
-			
 	</insert>
+	
+	<!-- 根据id更改SysUser -->
+	<update id="updateSysUserById">
+		update sys_user 
+			set user_name = #{userName},
+				user_password = #{userPassword},
+				user_email = #{userEmail},
+				user_info = #{userInfo},
+				head_img = #{headImg, jdbcType=BLOB},
+				create_time = #{createTime, jdbcType=TIMESTAMP}
+			where id = #{id}
+	</update>
+	
 	
 </mapper>					
