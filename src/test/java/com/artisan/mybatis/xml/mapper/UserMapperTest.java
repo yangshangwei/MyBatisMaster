@@ -313,8 +313,8 @@ public class UserMapperTest extends BaseMapperTest {
 		}
 	}
 
-
 	
+
 	@Test
 	public void deleteSysUserByIdTest() {
 		logger.info("deleteSysUserByIdTest");
