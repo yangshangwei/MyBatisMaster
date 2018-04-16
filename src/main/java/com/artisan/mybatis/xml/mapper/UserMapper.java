@@ -52,4 +52,18 @@ public interface UserMapper {
 
 	// 为了测试返回sysuser中的部分信息
 	List<SysRole> selectRoleListByUserIdMoreInfo(Long userId);
+
+	/**
+	 * 
+	 * 
+	 * @Title: insertSysUser
+	 * 
+	 * @Description: 增加SysUser
+	 * 
+	 * @param sysUser
+	 * @return
+	 * 
+	 * @return: int 受影响的行数
+	 */
+	int insertSysUser(SysUser sysUser);
 }

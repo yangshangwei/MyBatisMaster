@@ -111,4 +111,15 @@
 			a.id = #{userId}
 	</select>
 	
+	
+	<!-- 添加SysUser -->
+	<insert id="insertSysUser" >
+		insert into sys_user(
+			id,user_name, user_password, user_email, 
+			user_info, head_img, create_time)
+		values(
+			#{id},#{userName}, #{userPassword}, #{userEmail}, 
+			#{userInfo}, #{headImg, jdbcType=BLOB}, #{createTime, jdbcType=TIMESTAMP})
+	</insert>
+	
 </mapper>					
