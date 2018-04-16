@@ -69,4 +69,7 @@ public interface UserMapper {
 
 	// 演示使用JDBC方式返回主键的自增长值
 	int insertSysUser2(SysUser sysUser);
+
+	// 演示使用selectKey的方式返回主键的自增长值
+	int insertSysUser3(SysUser sysUser);
 }

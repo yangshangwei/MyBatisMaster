@@ -123,7 +123,7 @@
 	</insert>
 	
 	
-		<!-- 添加SysUser 使用JDBC的方式返回自增长的主键的值-->
+	<!-- 添加SysUser 使用JDBC的方式返回自增长的主键的值-->
 	<insert id="insertSysUser2"  useGeneratedKeys="true" keyProperty="id">
 		insert into sys_user(
 			user_name, user_password, user_email, 
@@ -131,6 +131,24 @@
 		values(
 			#{userName}, #{userPassword}, #{userEmail}, 
 			#{userInfo}, #{headImg, jdbcType=BLOB}, #{createTime, jdbcType=TIMESTAMP})
+	</insert>
+	
+	
+		<!-- 添加SysUser 使用selectKey的方式返回自增长的主键的值-->
+	<insert id="insertSysUser3">
+		insert into sys_user(
+			user_name, user_password, user_email, 
+			user_info, head_img, create_time)
+		values(
+			#{userName}, #{userPassword}, #{userEmail}, 
+			#{userInfo}, #{headImg, jdbcType=BLOB}, #{createTime, jdbcType=TIMESTAMP})
+		
+		<selectKey keyColumn="id" resultType="long" keyProperty="id"  order="AFTER">
+			select last_insert_id()
+		</selectKey>
+		
+		
+			
 	</insert>
 	
 </mapper>					

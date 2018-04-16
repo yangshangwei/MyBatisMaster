@@ -226,4 +226,44 @@ public class UserMapperTest extends BaseMapperTest {
 		}
 	}
 
+	@Test
+	public void insertSysUser3Test() {
+		logger.info("insertSysUser3Test");
+		// 获取SqlSession
+		SqlSession sqlSession = getSqlSession();
+		try {
+			// 获取UserMapper接口
+			UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+			SysUser sysUser = new SysUser();
+			sysUser.setUserName("artisanTest");
+			sysUser.setUserPassword("123456");
+			sysUser.setUserEmail("test@artisan.com");
+			sysUser.setUserInfo("测试用户");
+			// 模拟头像
+			sysUser.setHeadImg(new byte[] { 1, 2, 3 });
+			sysUser.setCreateTime(new Date());
+			// 新增用户 ,返回受影响的行数
+			int result = userMapper.insertSysUser3(sysUser);
+
+			// 只插入一条数据 ,期望是1
+			Assert.assertEquals(1, result);
+			// id不为null ,因为使用了 useGeneratedKeys="true" keyProperty="id"
+			Assert.assertNotNull(sysUser.getId());
+
+			logger.info("受影响的行数:" + result);
+			logger.info("userId:" + sysUser.getId());
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			// 为了保持测试数据的干净，这里选择回滚
+			// 由于默认的sqlSessionFactory.openSession()是不自动提交的
+			// 除非显式的commit，否则不会提交到数据库
+			sqlSession.rollback();
+			logger.info("为了保持测试数据的干净，这里选择回滚,不写入mysql,请观察日志，回滚完成");
+
+			sqlSession.close();
+			logger.info("sqlSession close successfully ");
+		}
+	}
+
 }
