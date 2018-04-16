@@ -160,12 +160,9 @@
 			where id = #{id}
 	</update>
 	
-	
-<<<<<<< HEAD
 	<!-- 根据ID删除用户 -->
 	<delete id="deleteSysUserById">
 		delete from sys_user where id = #{id}
 	</delete>
-=======
->>>>>>> refs/remotes/origin/master
+
 </mapper>					

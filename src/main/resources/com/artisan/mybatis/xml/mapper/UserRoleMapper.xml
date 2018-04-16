@@ -4,5 +4,23 @@
 
 <!-- 当Mapper接口和XML文件关联的时候， namespace的值就需要配置成接口的全限定名称 -->					
 <mapper namespace="com.artisan.mybatis.xml.mapper.UserRoleMapper">
-
+	
+	<select 
+		id="selectSysRolesByUserIdAndRoleEnable" 
+		resultType="com.artisan.mybatis.xml.domain.SysRole">
+		SELECT
+			c.id,
+			c.role_name roleName,
+			c.enabled,
+			c.create_by createBy,
+			c.create_time createTime
+		FROM
+			sys_user a
+		INNER JOIN sys_user_role b ON a.id = b.user_id
+		INNER JOIN sys_role c ON b.role_id = c.id
+		WHERE
+			a.id = #{userId}
+		AND c.enabled = #{enable}
+	</select>
+	
 </mapper>					
