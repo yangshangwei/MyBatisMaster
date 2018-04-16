@@ -34,10 +34,10 @@
 	
 	
 	
-	<!-- 通过全部的系统用户 -->
+	<!-- 通过全部的系统用户   数据库字段和实体列属性不一致，通过使用别名的方式映射-->
 	<select id="selectAll" resultType="com.artisan.mybatis.xml.domain.SysUser">
 		select
-			a.id id,
+			a.id ,
 			a.user_name userName,
 			a.user_password userPassword,
 			a.user_email userEmail,
@@ -119,6 +119,17 @@
 			user_info, head_img, create_time)
 		values(
 			#{id},#{userName}, #{userPassword}, #{userEmail}, 
+			#{userInfo}, #{headImg, jdbcType=BLOB}, #{createTime, jdbcType=TIMESTAMP})
+	</insert>
+	
+	
+		<!-- 添加SysUser 使用JDBC的方式返回自增长的主键的值-->
+	<insert id="insertSysUser2"  useGeneratedKeys="true" keyProperty="id">
+		insert into sys_user(
+			user_name, user_password, user_email, 
+			user_info, head_img, create_time)
+		values(
+			#{userName}, #{userPassword}, #{userEmail}, 
 			#{userInfo}, #{headImg, jdbcType=BLOB}, #{createTime, jdbcType=TIMESTAMP})
 	</insert>
 	
