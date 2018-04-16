@@ -266,4 +266,86 @@ public class UserMapperTest extends BaseMapperTest {
 		}
 	}
 
+	@Test
+	public void updateSysUserByIdTest() {
+		logger.info("updateSysUserByIdTest");
+		// 获取SqlSession
+		SqlSession sqlSession = getSqlSession();
+		try {
+			// 获取UserMapper接口
+			UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+
+			// 先根据ID查询出对应的sysuser
+			SysUser sysUser = userMapper.selectSysUserById((long) 1);
+			// 当前数据库用户的userName期望为admin
+			Assert.assertEquals("admin", sysUser.getUserName());
+
+			// 修改用户名
+			sysUser.setUserName("adminUpdated");
+			// 修改邮件
+			sysUser.setUserEmail("updateSysUser@artisan.com");
+			// 修改用户 ,返回受影响的行数
+			int result = userMapper.updateSysUserById(sysUser);
+
+			// 只插入一条数据 ,期望是1
+			Assert.assertEquals(1, result);
+			logger.info("受影响的行数:" + result);
+
+			logger.info("userName:" + sysUser.getUserName() + ",userEmail:" + sysUser.getUserEmail());
+
+			// 期望的用户名为adminUpdated
+			Assert.assertEquals("adminUpdated", sysUser.getUserName());
+			// 期望的邮箱为updateSysUser@artisan.com
+			Assert.assertEquals("updateSysUser@artisan.com", sysUser.getUserEmail());
+			
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			// 为了保持测试数据的干净，这里选择回滚
+			// 由于默认的sqlSessionFactory.openSession()是不自动提交的
+			// 除非显式的commit，否则不会提交到数据库
+			sqlSession.rollback();
+			logger.info("为了保持测试数据的干净，这里选择回滚,不写入mysql,请观察日志，回滚完成");
+
+			sqlSession.close();
+			logger.info("sqlSession close successfully ");
+		}
+	}
+
+
+	
+	@Test
+	public void deleteSysUserByIdTest() {
+		logger.info("deleteSysUserByIdTest");
+		// 获取SqlSession
+		SqlSession sqlSession = getSqlSession();
+		try {
+			// 获取UserMapper接口
+			UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+			
+			// 调用删除接口
+			int result = userMapper.deleteSysUserById((long) 1);
+			// 期望影响的结果条数为 1
+			Assert.assertEquals(1, result);
+
+			// 再次查询
+			SysUser sysUser = userMapper.selectSysUserById((long) 1);
+			// 期望查询出来的sysUser 为 null
+			Assert.assertNull(sysUser);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			// 为了保持测试数据的干净，这里选择回滚
+			// 由于默认的sqlSessionFactory.openSession()是不自动提交的
+			// 除非显式的commit，否则不会提交到数据库
+			sqlSession.rollback();
+			logger.info("为了保持测试数据的干净，这里选择回滚,不写入mysql,请观察日志，回滚完成");
+
+			sqlSession.close();
+			logger.info("sqlSession close successfully ");
+		}
+	}
+
 }
+
