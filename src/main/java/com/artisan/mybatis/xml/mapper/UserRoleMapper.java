@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import com.artisan.mybatis.xml.domain.SysRole;
+import com.artisan.mybatis.xml.domain.SysUser;
 
 public interface UserRoleMapper {
 
@@ -23,5 +24,7 @@ public interface UserRoleMapper {
 	 */
 	List<SysRole> selectSysRolesByUserIdAndRoleEnable(@Param("userId") Long userId, @Param("enable") Integer enable);
 
+	// 传递多个JavaBean的场景
+	List<SysRole> selectSysRolesByUserIdAndRoleEnable2(@Param("sysUser") SysUser sysUser, @Param("sysRole") SysRole sysRole);
 
 }
