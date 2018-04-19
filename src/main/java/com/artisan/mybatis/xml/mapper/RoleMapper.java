@@ -2,10 +2,13 @@ package com.artisan.mybatis.xml.mapper;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.SelectKey;
 
 import com.artisan.mybatis.xml.domain.SysRole;
 
@@ -123,4 +126,51 @@ public interface RoleMapper {
 	@Select({
  "SELECT  a.id, a.role_name,  a.enabled, a.create_by ,  a.create_time  FROM  sys_role a " })
 	List<SysRole> selectAllSysRole();
+
+	/**
+	 * 
+	 * 
+	 * @Title: insertSysRole
+	 * 
+	 * @Description: insertSysRole 不需要返回主键的情况
+	 * 
+	 * @param sysRole
+	 * @return
+	 * 
+	 * @return: int
+	 */
+	@Insert({ "insert into sys_role(id, role_name, enabled, create_by, create_time) values(#{id}, #{roleName}, #{enabled}, #{createBy}, #{createTime, jdbcType=TIMESTAMP})" })
+	int insertSysRole(SysRole sysRole);
+
+	/**
+	 * 
+	 * 
+	 * @Title: insertSysRole2
+	 * 
+	 * @Description: insertSysRole2 返回自增主键的情况
+	 * 
+	 * @param sysRole
+	 * @return
+	 * 
+	 * @return: int
+	 */
+	@Insert({ "insert into sys_role(role_name, enabled, create_by, create_time) values(#{roleName}, #{enabled}, #{createBy}, #{createTime, jdbcType=TIMESTAMP})" })
+	@Options(useGeneratedKeys = true, keyProperty = "id")
+	int insertSysRole2(SysRole sysRole);
+
+	/**
+	 * 
+	 * 
+	 * @Title: insertSysRole3
+	 * 
+	 * @Description: insertSysRole3 返回非自增主键的情况
+	 * 
+	 * @param sysRole
+	 * @return
+	 * 
+	 * @return: int
+	 */
+	@Insert({ "insert into sys_role(role_name, enabled, create_by, create_time) values(#{roleName}, #{enabled}, #{createBy}, #{createTime, jdbcType=TIMESTAMP})" })
+	@SelectKey(statement = "SELECT LAST_INSERT_ID()", keyProperty = "id", resultType = Long.class, before = false)
+	int insertSysRole3(SysRole sysRole);
 }	

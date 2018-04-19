@@ -1,5 +1,6 @@
 package com.artisan.mybatis.xml.mapper;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
@@ -111,6 +112,115 @@ public class RoleMapperTest extends BaseMapperTest {
 
 		} finally {
 			sqlSession.close();
+		}
+	}
+
+	@Test
+	public void insertSysRoleTest() {
+		logger.info("insertSysRoleTest");
+		// 获取SqlSession
+		SqlSession sqlSession = getSqlSession();
+		try {
+			// 获取RoleMapper接口
+			RoleMapper roleMapper = sqlSession.getMapper(RoleMapper.class);
+			SysRole sysRole = new SysRole();
+			sysRole.setId((long) 99);
+			sysRole.setRoleName("小工匠");
+			sysRole.setEnabled(1);
+			sysRole.setCreateBy("test");
+			sysRole.setCreateTime(new Date());
+			// 新增用户 ,返回受影响的行数
+			int result = roleMapper.insertSysRole(sysRole);
+
+			// 只插入一条数据 ,期望是1
+			Assert.assertEquals(1, result);
+			// 期望roleName 为小工匠
+			Assert.assertEquals("小工匠", sysRole.getRoleName());
+
+			logger.info("sysRole:" + sysRole);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			// 为了保持测试数据的干净，这里选择回滚
+			// 由于默认的sqlSessionFactory.openSession()是不自动提交的
+			// 除非显式的commit，否则不会提交到数据库
+			sqlSession.rollback();
+			logger.info("为了保持测试数据的干净，这里选择回滚,不写入mysql,请观察日志，回滚完成");
+
+			sqlSession.close();
+			logger.info("sqlSession close successfully ");
+		}
+	}
+
+	@Test
+	public void insertSysRoleTest2() {
+		logger.info("insertSysRoleTest2");
+		// 获取SqlSession
+		SqlSession sqlSession = getSqlSession();
+		try {
+			// 获取RoleMapper接口
+			RoleMapper roleMapper = sqlSession.getMapper(RoleMapper.class);
+			SysRole sysRole = new SysRole();
+			sysRole.setRoleName("小工匠2");
+			sysRole.setEnabled(1);
+			sysRole.setCreateBy("test2");
+			sysRole.setCreateTime(new Date());
+			// 新增用户 ,返回受影响的行数
+			int result = roleMapper.insertSysRole2(sysRole);
+
+			// 只插入一条数据 ,期望是1
+			Assert.assertEquals(1, result);
+			// 期望roleName 为小工匠
+			Assert.assertEquals("小工匠2", sysRole.getRoleName());
+
+			logger.info("sysRole:" + sysRole);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			// 为了保持测试数据的干净，这里选择回滚
+			// 由于默认的sqlSessionFactory.openSession()是不自动提交的
+			// 除非显式的commit，否则不会提交到数据库
+			sqlSession.rollback();
+			logger.info("为了保持测试数据的干净，这里选择回滚,不写入mysql,请观察日志，回滚完成");
+
+			sqlSession.close();
+			logger.info("sqlSession close successfully ");
+		}
+	}
+
+	@Test
+	public void insertSysRoleTest3() {
+		logger.info("insertSysRoleTest3");
+		// 获取SqlSession
+		SqlSession sqlSession = getSqlSession();
+		try {
+			// 获取RoleMapper接口
+			RoleMapper roleMapper = sqlSession.getMapper(RoleMapper.class);
+			SysRole sysRole = new SysRole();
+			sysRole.setRoleName("小工匠3");
+			sysRole.setEnabled(1);
+			sysRole.setCreateBy("test3");
+			sysRole.setCreateTime(new Date());
+			// 新增用户 ,返回受影响的行数
+			int result = roleMapper.insertSysRole3(sysRole);
+
+			// 只插入一条数据 ,期望是1
+			Assert.assertEquals(1, result);
+			// 期望roleName 为小工匠
+			Assert.assertEquals("小工匠3", sysRole.getRoleName());
+
+			logger.info("sysRole:" + sysRole);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			// 为了保持测试数据的干净，这里选择回滚
+			// 由于默认的sqlSessionFactory.openSession()是不自动提交的
+			// 除非显式的commit，否则不会提交到数据库
+			sqlSession.rollback();
+			logger.info("为了保持测试数据的干净，这里选择回滚,不写入mysql,请观察日志，回滚完成");
+
+			sqlSession.close();
+			logger.info("sqlSession close successfully ");
 		}
 	}
 }
