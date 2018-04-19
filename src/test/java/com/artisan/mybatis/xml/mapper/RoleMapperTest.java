@@ -223,4 +223,83 @@ public class RoleMapperTest extends BaseMapperTest {
 			logger.info("sqlSession close successfully ");
 		}
 	}
+
+	@Test
+	public void updateSysRoleByIdTest() {
+		logger.info("updateSysRoleByIdTest");
+		// 获取SqlSession
+		SqlSession sqlSession = getSqlSession();
+		try {
+			// 获取RoleMapper接口
+			RoleMapper roleMapper = sqlSession.getMapper(RoleMapper.class);
+
+			// 先根据ID查询出对应的sysRole
+			SysRole sysRole = roleMapper.selectSysRoleById((long) 1);
+			// roleName期望为管理员
+			Assert.assertEquals("管理员", sysRole.getRoleName());
+
+			// 修改RoleName
+			sysRole.setRoleName("管理员Artisan");
+			// 修改CreateBy
+			sysRole.setCreateBy("Artisan");
+			// 修改用户 ,返回受影响的行数
+			int result = roleMapper.updateSysRoleById(sysRole);
+
+			// 只插入一条数据 ,期望是1
+			Assert.assertEquals(1, result);
+			logger.info("受影响的行数:" + result);
+
+			// 期望的RoleName为管理员Artisan
+			Assert.assertEquals("管理员Artisan", sysRole.getRoleName());
+			// 期望的CreateBy为Artisan
+			Assert.assertEquals("Artisan", sysRole.getCreateBy());
+
+			logger.info("sysRole:" + sysRole);
+
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			// 为了保持测试数据的干净，这里选择回滚
+			// 由于默认的sqlSessionFactory.openSession()是不自动提交的
+			// 除非显式的commit，否则不会提交到数据库
+			sqlSession.rollback();
+			logger.info("为了保持测试数据的干净，这里选择回滚,不写入mysql,请观察日志，回滚完成");
+
+			sqlSession.close();
+			logger.info("sqlSession close successfully ");
+		}
+	}
+
+	@Test
+	public void deleteSysRoleByIdTest() {
+		logger.info("deleteSysRoleByIdTest");
+		// 获取SqlSession
+		SqlSession sqlSession = getSqlSession();
+		try {
+			// 获取roleMapper接口
+			RoleMapper roleMapper = sqlSession.getMapper(RoleMapper.class);
+
+			// 调用删除接口
+			int result = roleMapper.deleteSysRoleById((long) 1);
+			// 期望影响的结果条数为 1
+			Assert.assertEquals(1, result);
+
+			// 再次查询
+			SysRole sysRole = roleMapper.selectSysRoleById((long) 1);
+			// 期望查询出来的sysRole 为 null
+			Assert.assertNull(sysRole);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			// 为了保持测试数据的干净，这里选择回滚
+			// 由于默认的sqlSessionFactory.openSession()是不自动提交的
+			// 除非显式的commit，否则不会提交到数据库
+			sqlSession.rollback();
+			logger.info("为了保持测试数据的干净，这里选择回滚,不写入mysql,请观察日志，回滚完成");
+
+			sqlSession.close();
+			logger.info("sqlSession close successfully ");
+		}
+	}
 }

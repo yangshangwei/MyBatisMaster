@@ -2,6 +2,7 @@ package com.artisan.mybatis.xml.mapper;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Result;
@@ -9,6 +10,7 @@ import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.SelectKey;
+import org.apache.ibatis.annotations.Update;
 
 import com.artisan.mybatis.xml.domain.SysRole;
 
@@ -173,4 +175,35 @@ public interface RoleMapper {
 	@Insert({ "insert into sys_role(role_name, enabled, create_by, create_time) values(#{roleName}, #{enabled}, #{createBy}, #{createTime, jdbcType=TIMESTAMP})" })
 	@SelectKey(statement = "SELECT LAST_INSERT_ID()", keyProperty = "id", resultType = Long.class, before = false)
 	int insertSysRole3(SysRole sysRole);
+
+	/**
+	 * 
+	 * 
+	 * @Title: updateSysRoleById
+	 * 
+	 * @Description: updateSysRoleById
+	 * 
+	 * @param sysRole
+	 * @return
+	 * 
+	 * @return: int
+	 */
+	@Update({ "update sys_role set role_name = #{roleName},enabled = #{enabled},create_by = #{createBy},create_time = #{createTime, jdbcType=TIMESTAMP} where id = #{id}" })
+	int updateSysRoleById(SysRole sysRole);
+
+	/**
+	 * 
+	 * 
+	 * @Title: deleteSysRoleById
+	 * 
+	 * @Description: deleteSysRoleById
+	 * 
+	 * @param id
+	 * @return
+	 * 
+	 * @return: int
+	 */
+	@Delete("delete from sys_role where id = #{id}")
+	int deleteSysRoleById(Long id);
+
 }	
