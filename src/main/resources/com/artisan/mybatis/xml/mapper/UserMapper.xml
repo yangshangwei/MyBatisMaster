@@ -165,4 +165,28 @@
 		delete from sys_user where id = #{id}
 	</delete>
 
+	<!-- 动态SQL用法 BEGIN -->
+	
+	<select id="selectSysUsersAdvanced" resultType="com.artisan.mybatis.xml.domain.SysUser">
+		SELECT
+			a.id,
+			a.user_name userName,
+			a.user_password userPassword,
+			a.user_email userEmail,
+			a.user_info userInfo,
+			a.head_img headImg,
+			a.create_time createTime
+		FROM
+			sys_user a
+		WHERE 1=1
+		<if test="userName != null and userName != '' ">
+			and user_name like concat('%',#{userName},'%')
+		</if>
+		<if test="userEmail != null and userEmail != '' ">
+			and user_email = #{userEmail}
+		</if>
+	</select>
+	
+	<!-- 动态SQL用法 END -->
+
 </mapper>					
