@@ -532,7 +532,9 @@ public class UserMapperTest extends BaseMapperTest {
 		}
 	}
 
+
 	// 动态SQL END
+	
 
 }
 

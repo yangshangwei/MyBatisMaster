@@ -187,8 +187,6 @@
 		</if>
 	</select>
 	
-	
-	
 	<update id="updateSysUserByIdSelective">
 		update sys_user 
 			set
