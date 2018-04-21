@@ -100,4 +100,51 @@ public interface UserMapper {
 	 * @return: int
 	 */
 	int deleteSysUserById(Long id);
+
+	// 动态SQL BEGIN
+
+	/**
+	 * 
+	 * 
+	 * @Title: selectSysUsersAdvanced
+	 * 
+	 * @Description: 根据动态条件查询用户信息
+	 * 
+	 * @param sysUser
+	 * @return
+	 * 
+	 * @return: List<SysUser>
+	 */
+	List<SysUser> selectSysUsersAdvanced(SysUser sysUser);
+
+	/**
+	 * 
+	 * 
+	 * @Title: updateSysUserByIdSelective
+	 * 
+	 * @Description: 根据主键更新SysUser
+	 * 
+	 * @param sysUser
+	 * @return
+	 * 
+	 * @return: int
+	 */
+	int updateSysUserByIdSelective(SysUser sysUser);
+
+	/**
+	 * 
+	 * 
+	 * @Title: insertSysUserDyn
+	 * 
+	 * @Description: insertSysUserDyn
+	 * 
+	 * @param sysUser
+	 * @return
+	 * 
+	 * @return: int
+	 */
+	int insertSysUserDyn(SysUser sysUser);
+
+	// 动态SQL END
+
 }

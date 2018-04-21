@@ -165,4 +165,76 @@
 		delete from sys_user where id = #{id}
 	</delete>
 
+	<!-- 动态SQL用法 BEGIN -->
+	
+	<select id="selectSysUsersAdvanced" resultType="com.artisan.mybatis.xml.domain.SysUser">
+		SELECT
+			a.id,
+			a.user_name userName,
+			a.user_password userPassword,
+			a.user_email userEmail,
+			a.user_info userInfo,
+			a.head_img headImg,
+			a.create_time createTime
+		FROM
+			sys_user a
+		WHERE 1=1
+		<if test="userName != null and userName != '' ">
+			and user_name like concat('%',#{userName},'%')
+		</if>
+		<if test="userEmail != null and userEmail != '' ">
+			and user_email = #{userEmail}
+		</if>
+	</select>
+	
+	
+	
+	<update id="updateSysUserByIdSelective">
+		update sys_user 
+			set
+			<if test="userName != null and userName != ''">
+				user_name = #{userName},
+			</if>
+			<if test="userPassword != null and userPassword != ''">
+				user_password = #{userPassword},
+			</if>
+			<if test="userEmail != null and userEmail != ''">
+				user_email = #{userEmail},
+			</if>
+			<if test="userInfo != null and userInfo != ''">
+				user_info = #{userInfo},
+			</if>
+			<if test="headImg != null">
+				head_img = #{headImg, jdbcType=BLOB},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime, jdbcType=TIMESTAMP},
+			</if>
+				id = #{id}
+			where id = #{id}
+	</update>
+	
+	
+	<insert id="insertSysUserDyn" useGeneratedKeys="true" keyProperty="id">
+		insert into sys_user(
+			user_name, user_password, 
+			<if test="userEmail != null">
+				<if test="userEmail != ''">
+				user_email, 
+				</if>
+			</if>
+			user_info, head_img, create_time)
+		values(
+			#{userName}, #{userPassword}, 
+			<if test="userEmail != null">
+				<if test="userEmail != ''">
+				#{userEmail}, 
+				</if>
+			</if>
+			#{userInfo}, #{headImg, jdbcType=BLOB}, #{createTime, jdbcType=TIMESTAMP})
+	
+	</insert>
+	
+	<!-- 动态SQL用法 END -->
+
 </mapper>					

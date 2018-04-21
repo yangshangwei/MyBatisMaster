@@ -346,6 +346,193 @@ public class UserMapperTest extends BaseMapperTest {
 			logger.info("sqlSession close successfully ");
 		}
 	}
+	
+	
+	
+	// 动态SQL BEGIN
+
+	@Test
+	public void selectSysUsersAdvancedTest() {
+		logger.info("selectSysUsersAdvanced");
+		// 获取SqlSession
+		SqlSession sqlSession = getSqlSession();
+
+		List<SysUser> userList = null;
+		try {
+			// 获取UserMapper接口
+			UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+
+			logger.info("===========1.当用户只输入用户名时，需要根据用户名模糊查询===========");
+			// 模拟前台传参 1.当用户只输入用户名时，需要根据用户名模糊查询
+			SysUser sysUser = new SysUser();
+			sysUser.setUserName("ad");
+			// 调用selectSysUsersAdvanced,根据查询条件查询用户
+			userList = userMapper.selectSysUsersAdvanced(sysUser);
+			// 根据数据库sys_user表中的记录,可以匹配到admin, 期望userList不为空
+			Assert.assertNotNull(userList);
+			// 根据查询条件，期望只有1条数据
+			Assert.assertTrue(userList.size() == 1);
+			logger.info("userList:" + userList);
+					
+			// 为了测试 匹配多条记录的情况，我们将id=1001这条数据的userName 由test 改为artisan
+			sysUser.setUserName("i");
+			// 调用selectSysUsersAdvanced,根据查询条件查询用户
+			userList = userMapper.selectSysUsersAdvanced(sysUser);
+			// 根据数据库sys_user表中的记录,可以匹配到admin和artisan, 期望userList不为空
+			Assert.assertNotNull(userList);
+			// 根据查询条件，期望只有2条数据
+			Assert.assertTrue(userList.size() == 2);
+
+			logger.info("userList:" + userList);
+			
+			logger.info("===========2.当用户只输入邮箱使，根据邮箱进行完全匹配===========");
+			// 模拟前台传参 2.当用户只输入邮箱使，根据邮箱进行完全匹配
+			sysUser.setUserEmail("admin@artisan.com");
+			userList = userMapper.selectSysUsersAdvanced(sysUser);
+			Assert.assertNotNull(userList);
+			Assert.assertTrue(userList.size() == 1);
+			logger.info(userList);
+
+			sysUser.setUserEmail("1admin@artisan.com");
+			userList = userMapper.selectSysUsersAdvanced(sysUser);
+			Assert.assertTrue(userList.size() == 0);
+
+			logger.info("===========当用户同时输入用户名和密码时，用这两个条件查询匹配的用户===========");
+
+			// 模拟组合查询条件,存在记录的情况
+			sysUser.setUserName("i");
+			sysUser.setUserEmail("admin@artisan.com");
+			userList = userMapper.selectSysUsersAdvanced(sysUser);
+			Assert.assertNotNull(userList);
+			Assert.assertEquals("admin@artisan.com", sysUser.getUserEmail());
+			Assert.assertTrue(userList.size() == 1);
+			logger.info(userList);
+
+			// 模拟组合查询条件,不存在记录的情况
+			sysUser.setUserName("x");
+			sysUser.setUserEmail("admin@artisan.com");
+			userList = userMapper.selectSysUsersAdvanced(sysUser);
+			Assert.assertTrue(userList.size() == 0);
+			logger.info(userList);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			sqlSession.close();
+			logger.info("sqlSession close successfully ");
+		}
+	}
+
+	
+	@Test
+	public void updateSysUserByIdSelectiveTest() {
+		logger.info("updateSysUserByIdSelectiveTest");
+		// 获取SqlSession
+		SqlSession sqlSession = getSqlSession();
+		try {
+			// 获取UserMapper接口
+			UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+
+			// 先根据ID查询出对应的sysuser
+			SysUser sysUser = userMapper.selectSysUserById((long) 1);
+			// 当前数据库用户的userName期望为admin
+			Assert.assertEquals("admin", sysUser.getUserName());
+
+			// 修改用户名
+			sysUser.setUserName("dynamicUpdate");
+			// 修改邮件
+			sysUser.setUserEmail("dynamicUpdate@artisan.com");
+			// 修改用户 ,返回受影响的行数
+			int result = userMapper.updateSysUserByIdSelective(sysUser);
+
+			// 只插入一条数据 ,期望是1
+			Assert.assertEquals(1, result);
+			logger.info("受影响的行数:" + result);
+			// 期望的用户名为dynamicUpdate
+			Assert.assertEquals("dynamicUpdate", sysUser.getUserName());
+			// 期望的邮箱为dynamicUpdate@artisan.com
+			Assert.assertEquals("dynamicUpdate@artisan.com", sysUser.getUserEmail());
+
+			// 检查其他字段有没有被更新为null 或者 空值
+			Assert.assertEquals("123456", sysUser.getUserPassword());
+			Assert.assertEquals("管理员用户", sysUser.getUserInfo());
+			logger.info(sysUser);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			// 为了保持测试数据的干净，这里选择回滚
+			// 由于默认的sqlSessionFactory.openSession()是不自动提交的
+			// 除非显式的commit，否则不会提交到数据库
+			sqlSession.rollback();
+			logger.info("为了保持测试数据的干净，这里选择回滚,不写入mysql,请观察日志，回滚完成");
+
+			sqlSession.close();
+			logger.info("sqlSession close successfully ");
+		}
+	}
+
+	@Test
+	public void insertSysUserDynTest() {
+		logger.info("insertSysUserDynTest");
+		// 获取SqlSession
+		SqlSession sqlSession = getSqlSession();
+		try {
+			// 获取UserMapper接口
+			UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+
+			logger.info("=========不设置email=========");
+			// 不设置userEmail ，观察是否能够插入默认的email
+			SysUser sysUser = new SysUser();
+			sysUser.setUserName("artisanTest");
+			sysUser.setUserPassword("123456");
+			sysUser.setUserInfo("测试用户");
+			// 模拟头像
+			sysUser.setHeadImg(new byte[] { 1, 2, 3 });
+			sysUser.setCreateTime(new Date());
+			// 新增用户 ,返回受影响的行数
+			int result = userMapper.insertSysUserDyn(sysUser);
+
+			// 只插入一条数据 ,期望是1
+			Assert.assertEquals(1, result);
+
+			// 获取这条新插入的sysUser
+			sysUser = userMapper.selectSysUserById(sysUser.getId());
+			// 没有设置userEmail ,期望是数据库的默认值
+			Assert.assertEquals("default@artisan.com", sysUser.getUserEmail());
+			logger.info(sysUser);
+
+			logger.info("=========设置email=========");
+			// 设置email
+			sysUser.setUserName("artisanTest");
+			sysUser.setUserPassword("123456");
+			sysUser.setUserEmail("artisan@artisan.com");
+			sysUser.setUserInfo("测试用户");
+			// 模拟头像
+			sysUser.setHeadImg(new byte[] { 1, 2, 3 });
+			sysUser.setCreateTime(new Date());
+			result = userMapper.insertSysUserDyn(sysUser);
+
+			// 获取这条新插入的sysUser
+			sysUser = userMapper.selectSysUserById(sysUser.getId());
+			// 有设置userEmail ,期望是传入的值
+			Assert.assertEquals("artisan@artisan.com", sysUser.getUserEmail());
+			logger.info(sysUser);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			// 为了保持测试数据的干净，这里选择回滚
+			// 由于默认的sqlSessionFactory.openSession()是不自动提交的
+			// 除非显式的commit，否则不会提交到数据库
+			sqlSession.rollback();
+			logger.info("为了保持测试数据的干净，这里选择回滚,不写入mysql,请观察日志，回滚完成");
+
+			sqlSession.close();
+			logger.info("sqlSession close successfully ");
+		}
+	}
+
+	// 动态SQL END
 
 }
 
