@@ -397,7 +397,7 @@ public class UserMapperTest extends BaseMapperTest {
 			userList = userMapper.selectSysUsersAdvanced(sysUser);
 			Assert.assertTrue(userList.size() == 0);
 
-			logger.info("===========当用户同时输入用户名和密码时，用这两个条件查询匹配的用户===========");
+			logger.info("===========3.当用户同时输入用户名和密码时，用这两个条件查询匹配的用户===========");
 
 			// 模拟组合查询条件,存在记录的情况
 			sysUser.setUserName("i");
@@ -408,6 +408,7 @@ public class UserMapperTest extends BaseMapperTest {
 			Assert.assertTrue(userList.size() == 1);
 			logger.info(userList);
 
+			logger.info("===========4.当用户同时输入无法匹配的用户名和密码===========");
 			// 模拟组合查询条件,不存在记录的情况
 			sysUser.setUserName("x");
 			sysUser.setUserEmail("admin@artisan.com");
@@ -448,6 +449,9 @@ public class UserMapperTest extends BaseMapperTest {
 			// 只插入一条数据 ,期望是1
 			Assert.assertEquals(1, result);
 			logger.info("受影响的行数:" + result);
+
+			// 重新查询（虽然未提交但是在一个会话中）
+			sysUser = userMapper.selectSysUserById((long) 1);
 			// 期望的用户名为dynamicUpdate
 			Assert.assertEquals("dynamicUpdate", sysUser.getUserName());
 			// 期望的邮箱为dynamicUpdate@artisan.com
@@ -589,8 +593,134 @@ public class UserMapperTest extends BaseMapperTest {
 		
 	}
 	
-	
 	// 动态SQL choose when otherwise END
+	
+	// 动态SQL where set trim BEGIN
+	@Test
+	public void selectSysUsersAdvancedWithWhere() {
+		logger.info("selectSysUsersAdvancedWithWhere");
+		// 获取SqlSession
+		SqlSession sqlSession = getSqlSession();
+
+		List<SysUser> userList = null;
+		try {
+			// 获取UserMapper接口
+			UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+
+			logger.info("===========1.当用户只输入用户名时，需要根据用户名模糊查询===========");
+			// 模拟前台传参 1.当用户只输入用户名时，需要根据用户名模糊查询
+			SysUser sysUser = new SysUser();
+			sysUser.setUserName("ad");
+			// 调用selectSysUsersAdvanced,根据查询条件查询用户
+			userList = userMapper.selectSysUsersAdvancedWithWhere(sysUser);
+			// 根据数据库sys_user表中的记录,可以匹配到admin, 期望userList不为空
+			Assert.assertNotNull(userList);
+			// 根据查询条件，期望只有1条数据
+			Assert.assertTrue(userList.size() == 1);
+			Assert.assertEquals("admin", userList.get(0).getUserName());
+
+			logger.info("userList:" + userList);
+
+			// 为了测试 匹配多条记录的情况，我们将id=1001这条数据的userName 由test 改为artisan
+			sysUser.setUserName("i");
+			// 调用selectSysUsersAdvanced,根据查询条件查询用户
+			userList = userMapper.selectSysUsersAdvancedWithWhere(sysUser);
+			// 根据数据库sys_user表中的记录,可以匹配到admin和artisan, 期望userList不为空
+			Assert.assertNotNull(userList);
+			// 根据查询条件，期望只有2条数据
+			Assert.assertTrue(userList.size() == 2);
+
+			logger.info("userList:" + userList);
+
+			logger.info("===========2.当用户只输入邮箱使，根据邮箱进行完全匹配===========");
+			// 模拟前台传参 2.当用户只输入邮箱使，根据邮箱进行完全匹配
+			sysUser.setUserEmail("admin@artisan.com");
+			userList = userMapper.selectSysUsersAdvancedWithWhere(sysUser);
+			Assert.assertNotNull(userList);
+			Assert.assertTrue(userList.size() == 1);
+			logger.info(userList);
+
+			sysUser.setUserEmail("1admin@artisan.com");
+			userList = userMapper.selectSysUsersAdvancedWithWhere(sysUser);
+			Assert.assertTrue(userList.size() == 0);
+
+			logger.info("===========3.当用户同时输入用户名和密码时，用这两个条件查询匹配的用户===========");
+			// 模拟组合查询条件,存在记录的情况
+			sysUser.setUserName("i");
+			sysUser.setUserEmail("admin@artisan.com");
+			userList = userMapper.selectSysUsersAdvancedWithWhere(sysUser);
+			Assert.assertNotNull(userList);
+			Assert.assertEquals("admin@artisan.com", sysUser.getUserEmail());
+			Assert.assertTrue(userList.size() == 1);
+			logger.info(userList);
+
+			logger.info("===========4.当用户同时输入无法匹配的用户名和密码===========");
+			// 模拟组合查询条件,不存在记录的情况
+			sysUser.setUserName("x");
+			sysUser.setUserEmail("admin@artisan.com");
+			userList = userMapper.selectSysUsersAdvancedWithWhere(sysUser);
+			Assert.assertTrue(userList.size() == 0);
+			logger.info(userList);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			sqlSession.close();
+			logger.info("sqlSession close successfully ");
+		}
+	}
+
+	@Test
+	public void updateSysUserByIdWithSetSelectiveTest() {
+		logger.info("updateSysUserByIdWithSetSelective");
+		// 获取SqlSession
+		SqlSession sqlSession = getSqlSession();
+		try {
+			// 获取UserMapper接口
+			UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+
+			// 先根据ID查询出对应的sysuser
+			SysUser sysUser = userMapper.selectSysUserById((long) 1);
+			// 当前数据库用户的userName期望为admin
+			Assert.assertEquals("admin", sysUser.getUserName());
+
+			// 修改用户名
+			sysUser.setUserName("dynamicUpdate");
+			// 修改邮件
+			sysUser.setUserEmail("dynamicUpdate@artisan.com");
+			// 修改用户 ,返回受影响的行数
+			int result = userMapper.updateSysUserByIdWithSetSelective(sysUser);
+
+			// 只插入一条数据 ,期望是1
+			Assert.assertEquals(1, result);
+			logger.info("受影响的行数:" + result);
+			// 重新查询（虽然未提交但是在一个会话中）
+			sysUser = userMapper.selectSysUserById((long) 1);
+			// 期望的用户名为dynamicUpdate
+			Assert.assertEquals("dynamicUpdate", sysUser.getUserName());
+			// 期望的邮箱为dynamicUpdate@artisan.com
+			Assert.assertEquals("dynamicUpdate@artisan.com", sysUser.getUserEmail());
+
+			// 检查其他字段有没有被更新为null 或者 空值
+			Assert.assertEquals("123456", sysUser.getUserPassword());
+			Assert.assertEquals("管理员用户", sysUser.getUserInfo());
+			logger.info(sysUser);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			// 为了保持测试数据的干净，这里选择回滚
+			// 由于默认的sqlSessionFactory.openSession()是不自动提交的
+			// 除非显式的commit，否则不会提交到数据库
+			sqlSession.rollback();
+			logger.info("为了保持测试数据的干净，这里选择回滚,不写入mysql,请观察日志，回滚完成");
+
+			sqlSession.close();
+			logger.info("sqlSession close successfully ");
+		}
+	}
+
+	// 动态SQL where set trim END
 
 }
 

@@ -262,8 +262,61 @@
 		</choose>
 	</select>
 	
-	
-	
 	<!-- 动态SQL之choose when otherwise用法  END -->
+	
+	<!-- 动态SQL where  set  BEGIN-->
+		
+	<select id="selectSysUsersAdvancedWithWhere" resultType="com.artisan.mybatis.xml.domain.SysUser">
+		SELECT
+			a.id,
+			a.user_name userName,
+			a.user_password userPassword,
+			a.user_email userEmail,
+			a.user_info userInfo,
+			a.head_img headImg,
+			a.create_time createTime
+		FROM
+			sys_user a
+		<where>
+			<if test="userName != null and userName != '' ">
+				and user_name like concat('%',#{userName},'%')
+			</if>
+			<if test="userEmail != null and userEmail != '' ">
+				and user_email = #{userEmail}
+			</if>
+		</where>
+		
+	</select>
+	
+	
+	<update id="updateSysUserByIdWithSetSelective">
+		update sys_user 
+			<set>
+				<if test="userName != null and userName != ''">
+					user_name = #{userName},
+				</if>
+				<if test="userPassword != null and userPassword != ''">
+					user_password = #{userPassword},
+				</if>
+				<if test="userEmail != null and userEmail != ''">
+					user_email = #{userEmail},
+				</if>
+				<if test="userInfo != null and userInfo != ''">
+					user_info = #{userInfo},
+				</if>
+				<if test="headImg != null">
+					head_img = #{headImg, jdbcType=BLOB},
+				</if>
+				<if test="createTime != null">
+					create_time = #{createTime, jdbcType=TIMESTAMP},
+				</if>
+					<!-- 如果set后面的字符串是以逗号结尾的，就将这个逗号剔除,加个逗号演示下 -->
+					id = #{id},
+			</set>
+			where id = #{id}
+	</update>
+	
+
+	<!--  动态SQL where  set  END-->
 
 </mapper>					

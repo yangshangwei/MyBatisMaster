@@ -161,5 +161,38 @@ public interface UserMapper {
 	 * @return: SysUser
 	 */
 	SysUser selectSysUserByIdOrByUserName(SysUser sysUser);
+
 	// 动态sql choose END
+
+	// 动态SQL where set BEGIN
+
+	/**
+	 * 
+	 * 
+	 * @Title: selectSysUsersAdvancedWithWhere
+	 * 
+	 * @Description: selectSysUsersAdvancedWithWhere
+	 * 
+	 * @param sysUser
+	 * @return
+	 * 
+	 * @return: List<SysUser>
+	 */
+	List<SysUser> selectSysUsersAdvancedWithWhere(SysUser sysUser);
+
+	/**
+	 * 
+	 * 
+	 * @Title: updateSysUserByIdWithSetSelective
+	 * 
+	 * @Description: 根据主键更新SysUser
+	 * 
+	 * @param sysUser
+	 * @return
+	 * 
+	 * @return: int
+	 */
+	int updateSysUserByIdWithSetSelective(SysUser sysUser);
+
+	// 动态SQL where set END
 }
