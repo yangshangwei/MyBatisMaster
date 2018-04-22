@@ -101,7 +101,7 @@ public interface UserMapper {
 	 */
 	int deleteSysUserById(Long id);
 
-	// 动态SQL BEGIN
+	// 动态SQL if BEGIN
 
 	/**
 	 * 
@@ -145,6 +145,21 @@ public interface UserMapper {
 	 */
 	int insertSysUserDyn(SysUser sysUser);
 
-	// 动态SQL END
+	// 动态SQLif END
 
+	// 动态SQL choose BEGIN
+	/**
+	 * 
+	 * 
+	 * @Title: selectSysUserByIdOrByUserName
+	 * 
+	 * @Description: 根据用户id或者用户名查询用户
+	 * 
+	 * @param sysUser
+	 * @return
+	 * 
+	 * @return: SysUser
+	 */
+	SysUser selectSysUserByIdOrByUserName(SysUser sysUser);
+	// 动态sql choose END
 }

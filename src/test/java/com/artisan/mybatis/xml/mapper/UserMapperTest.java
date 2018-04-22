@@ -349,7 +349,7 @@ public class UserMapperTest extends BaseMapperTest {
 	
 	
 	
-	// 动态SQL BEGIN
+	// 动态SQL if BEGIN
 
 	@Test
 	public void selectSysUsersAdvancedTest() {
@@ -533,8 +533,64 @@ public class UserMapperTest extends BaseMapperTest {
 	}
 
 
-	// 动态SQL END
+	// 动态SQL if END
 	
+	// 动态SQL choose when otherwise BEGIN
+	@Test
+	public void selectSysUserByIdOrByUserNameTest() {
+		logger.info("selectSysUserByIdOrByUserNameTest");
+		// 获取SqlSession
+		SqlSession sqlSession = getSqlSession();
+		try {
+			// 获取UserMapper接口
+			UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+
+			logger.info("======. 模拟传入了正确的id 没有传username或者传入了错误的userName======");
+			// 1. 模拟传入了正确的id 没有传username或者传入了错误的userName
+			SysUser sysUser = new SysUser();
+			sysUser.setId(1001L);
+			sysUser.setUserName("noExistName");
+			// 调用selectSysUserByIdOrByUserName,查询单个用户
+			SysUser user = userMapper.selectSysUserByIdOrByUserName(sysUser);
+			// 期望不为空
+			Assert.assertNotNull(user);
+			// userName 期望值为artisan
+			Assert.assertEquals("artisan", user.getUserName());
+			logger.info(user);
+
+			logger.info("======2. 模拟不传id,但是传入了正确的 userName======");
+			// 2. 模拟不传id,但是传入了正确的 userName
+			sysUser = new SysUser();
+			sysUser.setId(null);
+			sysUser.setUserName("admin");
+			user = userMapper.selectSysUserByIdOrByUserName(sysUser);
+			// 期望不为空
+			Assert.assertNotNull(user);
+			// 根据id查询 sysuser,然后获取userName 期望值为artisan
+			Assert.assertEquals("admin", user.getUserName());
+			logger.info(user);
+
+			logger.info("======3.什么都不传======");
+			// 2. 模拟不传id,但是传入了正确的 userName
+			sysUser = new SysUser();
+			sysUser.setId(null);
+			sysUser.setUserName(null);
+			user = userMapper.selectSysUserByIdOrByUserName(sysUser);
+			// 期望为空
+			Assert.assertNull(user);
+			logger.info(user);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			sqlSession.close();
+			logger.info("sqlSession close successfully ");
+		}
+		
+	}
+	
+	
+	// 动态SQL choose when otherwise END
 
 }
 

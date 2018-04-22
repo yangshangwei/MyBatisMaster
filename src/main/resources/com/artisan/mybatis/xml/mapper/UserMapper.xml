@@ -165,7 +165,7 @@
 		delete from sys_user where id = #{id}
 	</delete>
 
-	<!-- 动态SQL用法 BEGIN -->
+	<!-- 动态SQL之if用法 BEGIN -->
 	
 	<select id="selectSysUsersAdvanced" resultType="com.artisan.mybatis.xml.domain.SysUser">
 		SELECT
@@ -233,6 +233,37 @@
 	
 	</insert>
 	
-	<!-- 动态SQL用法 END -->
+	<!-- 动态SQL之if用法  END -->
+	
+	<!-- 动态SQL之choose when otherwise用法  BEGIN -->
+	
+	<select id="selectSysUserByIdOrByUserName" resultType="com.artisan.mybatis.xml.domain.SysUser">
+		SELECT
+			a.id,
+			a.user_name userName,
+			a.user_password userPassword,
+			a.user_email userEmail,
+			a.user_info userInfo,
+			a.head_img headImg,
+			a.create_time createTime
+		FROM
+			sys_user a
+		WHERE 1=1
+		<choose>
+			<when test="id != null ">
+				and id = #{id}
+			</when>
+			<when test="userName!= null ">
+				and user_name = #{userName}
+			</when>
+			<otherwise>
+				and 1 = 2
+			</otherwise>
+		</choose>
+	</select>
+	
+	
+	
+	<!-- 动态SQL之choose when otherwise用法  END -->
 
 </mapper>					
