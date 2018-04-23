@@ -1,5 +1,6 @@
 package com.artisan.mybatis.xml.mapper;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -721,6 +722,38 @@ public class UserMapperTest extends BaseMapperTest {
 	}
 
 	// 动态SQL where set trim END
+
+	// 动态SQL foreach实现in集合 BEGIN
+	@Test
+	public void selectSysUserByIdListTest() {
+		logger.info("selectSysUserByIdListTest");
+		// 获取SqlSession
+		SqlSession sqlSession = getSqlSession();
+		try {
+			// 获取UserMapper接口
+			UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+			// 模拟idList
+			List<Long> idList = new ArrayList<Long>();
+			idList.add(1L);
+			idList.add(1001L);
+			// 调用接口方法
+			List<SysUser> userList = userMapper.selectSysUserByIdList(idList);
+			// userList不为空
+			Assert.assertNotNull(userList);
+			// userList > 0
+			Assert.assertTrue(userList.size() > 0);
+			// 期望返回2条数据，符合数据库中记录
+			Assert.assertEquals(2, userList.size());
+			logger.info(userList);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			sqlSession.close();
+			logger.info("sqlSession close successfully ");
+		}
+	}
+
+	// 动态SQL foreach实现in集合 END
 
 }
 
