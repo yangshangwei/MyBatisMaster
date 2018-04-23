@@ -1,6 +1,9 @@
 package com.artisan.mybatis.xml.mapper;
 
 import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.annotations.Param;
 
 import com.artisan.mybatis.xml.domain.SysRole;
 import com.artisan.mybatis.xml.domain.SysUser;
@@ -214,7 +217,7 @@ public interface UserMapper {
 
 	// 动态SQL foreach实现in集合 END
 
-	// 动态SQL foreach实现批量 insert BEGIN（仅MYSQL数据库支持）
+	// 动态SQL foreach实现批量 insert BEGIN（仅部分数据库支持）
 	/**
 	 * 
 	 * 
@@ -228,5 +231,25 @@ public interface UserMapper {
 	 * @return: int
 	 */
 	int insertSysUserList(List<SysUser> sysUserList);
-	// 动态SQL foreach实现批量 insert END（仅MYSQL数据库支持）
+
+	// 动态SQL foreach实现批量 insert END（仅部分数据库支持）
+
+	// 动态SQL foreach实现动态update
+	/**
+	 * 
+	 * 
+	 * @Title: updateSysUserByMap
+	 * 
+	 * @Description: updateSysUserByMap
+	 * 
+	 * @param sysUser
+	 * @return
+	 * 
+	 * @return: void
+	 */
+	void updateSysUserByMap(Map<String, Object> map);
+
+	void updateSysUserByMapWithParam(@Param("userMap") Map<String, Object> map);
+	// 动态SQL foreach实现动态update
+
 }

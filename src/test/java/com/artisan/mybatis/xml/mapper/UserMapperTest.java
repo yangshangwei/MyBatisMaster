@@ -2,7 +2,9 @@ package com.artisan.mybatis.xml.mapper;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.apache.log4j.Logger;
@@ -810,7 +812,50 @@ public class UserMapperTest extends BaseMapperTest {
 			logger.info("sqlSession close successfully ");
 		}
 	}
+
 	// 动态SQL foreach实现批量insert END
+
+	@Test
+	public void updateSysUserByMapTest() {
+		logger.info("updateSysUserByMapTest");
+		// 获取SqlSession
+		SqlSession sqlSession = getSqlSession();
+		try {
+			// 获取UserMapper接口
+			UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+
+			// 模拟Map
+			Map<String, Object> userMap = new HashMap<String, Object>();
+			// 查询条件，同时也是where后面的更新字段， 必须存在
+			userMap.put("id", 1L);
+			// 更新其他字段
+			userMap.put("user_email", "map@artisan.com");
+			userMap.put("user_name", "ARTISAN_ADMIN");
+
+			// 调用接口,更新数据
+			// userMapper.updateSysUserByMap(userMap);
+			// 或者
+			userMapper.updateSysUserByMapWithParam(userMap);
+			
+			// 根据当前id 查询用户
+			SysUser sysUser = userMapper.selectSysUserById(1L);
+			Assert.assertEquals("map@artisan.com", sysUser.getUserEmail());
+			Assert.assertEquals("ARTISAN_ADMIN", sysUser.getUserName());
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			// 为了保持测试数据的干净，这里选择回滚
+			// 由于默认的sqlSessionFactory.openSession()是不自动提交的
+			// 除非显式的commit，否则不会提交到数据库
+			sqlSession.rollback();
+			logger.info("为了保持测试数据的干净，这里选择回滚,不写入mysql,请观察日志，回滚完成");
+
+			sqlSession.close();
+			logger.info("sqlSession close successfully ");
+		}
+	}
+
 
 }
 
