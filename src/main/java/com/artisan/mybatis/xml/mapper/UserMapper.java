@@ -214,7 +214,7 @@ public interface UserMapper {
 
 	// 动态SQL foreach实现in集合 END
 
-	// 动态SQL foreach实现批量 insert BEGIN（仅MYSQL数据库支持）
+	// 动态SQL foreach实现批量 insert BEGIN（仅部分数据库支持）
 	/**
 	 * 
 	 * 
@@ -228,5 +228,6 @@ public interface UserMapper {
 	 * @return: int
 	 */
 	int insertSysUserList(List<SysUser> sysUserList);
-	// 动态SQL foreach实现批量 insert END（仅MYSQL数据库支持）
+	// 动态SQL foreach实现批量 insert END（仅部分数据库支持）
+
 }
