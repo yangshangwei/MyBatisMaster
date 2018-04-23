@@ -1,5 +1,6 @@
 package com.artisan.mybatis.xml.mapper;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -721,6 +722,95 @@ public class UserMapperTest extends BaseMapperTest {
 	}
 
 	// 动态SQL where set trim END
+
+	// 动态SQL foreach实现in集合 BEGIN
+	@Test
+	public void selectSysUserByIdListTest() {
+		logger.info("selectSysUserByIdListTest");
+		// 获取SqlSession
+		SqlSession sqlSession = getSqlSession();
+		try {
+			// 获取UserMapper接口
+			UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+			// 模拟idList
+			List<Long> idList = new ArrayList<Long>();
+			idList.add(1L);
+			idList.add(1001L);
+			// 调用接口方法
+			List<SysUser> userList = userMapper.selectSysUserByIdList(idList);
+			// userList不为空
+			Assert.assertNotNull(userList);
+			// userList > 0
+			Assert.assertTrue(userList.size() > 0);
+			// 期望返回2条数据，符合数据库中记录
+			Assert.assertEquals(2, userList.size());
+			logger.info(userList);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			sqlSession.close();
+			logger.info("sqlSession close successfully ");
+		}
+	}
+
+	// 动态SQL foreach实现in集合 END
+
+	// 动态SQL foreach实现批量insert BEGIN
+	@Test
+	public void insertSysUserListTest() {
+		logger.info("insertSysUserListTest");
+		// 获取SqlSession
+		SqlSession sqlSession = getSqlSession();
+		try {
+			// 获取UserMapper接口
+			UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+
+			// 模拟userList
+			List<SysUser> userList = new ArrayList<SysUser>();
+
+			for (int i = 0; i < 5; i++) {
+				SysUser sysUser = new SysUser();
+				sysUser.setUserName("artisanTest_" + i);
+				sysUser.setUserPassword("123456_" + i);
+				sysUser.setUserEmail("artisan_" + i + "@artisan.com");
+				sysUser.setUserInfo("测试用户" + i);
+				// 模拟头像
+				sysUser.setHeadImg(new byte[] { 1, 2, 3 });
+				sysUser.setCreateTime(new Date());
+				
+				// 添加到SysUser
+				userList.add(sysUser);
+			}
+
+			// 新增用户 ,返回受影响的行数
+			int result = userMapper.insertSysUserList(userList);
+			// 返回批量的自增主键 配合 keyProperty="id" useGeneratedKeys="true" 这两个属性
+			for (SysUser sysUser : userList) {
+				logger.info(sysUser.getId());
+			}
+			// 只插入一条数据 ,期望是5
+			Assert.assertEquals(5, result);
+
+			// 重新查询
+			List<SysUser> sysUserList = userMapper.selectAll();
+			// 根据数据库之前的2条记录，加上本次新增的5条（虽未提交但还是在一个会话中，所以可以查询的到）
+			Assert.assertNotNull(sysUserList);
+			Assert.assertEquals(7, sysUserList.size());
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			// 为了保持测试数据的干净，这里选择回滚
+			// 由于默认的sqlSessionFactory.openSession()是不自动提交的
+			// 除非显式的commit，否则不会提交到数据库
+			sqlSession.rollback();
+			logger.info("为了保持测试数据的干净，这里选择回滚,不写入mysql,请观察日志，回滚完成");
+
+			sqlSession.close();
+			logger.info("sqlSession close successfully ");
+		}
+	}
+	// 动态SQL foreach实现批量insert END
 
 }
 

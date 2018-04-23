@@ -195,4 +195,38 @@ public interface UserMapper {
 	int updateSysUserByIdWithSetSelective(SysUser sysUser);
 
 	// 动态SQL where set END
+
+	// 动态SQL foreach实现in集合 BEGIN
+
+	/**
+	 * 
+	 * 
+	 * @Title: selectSysUserByIdList
+	 * 
+	 * @Description: 根据用户ID集合查询用户
+	 * 
+	 * @param ids
+	 * @return
+	 * 
+	 * @return: List<SysUser>
+	 */
+	List<SysUser> selectSysUserByIdList(List<Long> ids);
+
+	// 动态SQL foreach实现in集合 END
+
+	// 动态SQL foreach实现批量 insert BEGIN（仅MYSQL数据库支持）
+	/**
+	 * 
+	 * 
+	 * @Title: insertSysUserList
+	 * 
+	 * @Description: 批量新增用户
+	 * 
+	 * @param sysUserList
+	 * @return
+	 * 
+	 * @return: int
+	 */
+	int insertSysUserList(List<SysUser> sysUserList);
+	// 动态SQL foreach实现批量 insert END（仅MYSQL数据库支持）
 }

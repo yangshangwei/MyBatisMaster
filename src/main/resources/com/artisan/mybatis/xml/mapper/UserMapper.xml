@@ -315,8 +315,43 @@
 			</set>
 			where id = #{id}
 	</update>
-	
-
 	<!--  动态SQL where  set  END-->
+	
+	<!--  动态SQL foreach实现in集合 BEGIN-->
+	<select id="selectSysUserByIdList" resultType="com.artisan.mybatis.xml.domain.SysUser">
+		SELECT
+			a.id,
+			a.user_name userName,
+			a.user_password userPassword,
+			a.user_email userEmail,
+			a.user_info userInfo,
+			a.head_img headImg,
+			a.create_time createTime
+		FROM
+			sys_user a
+		WHERE id in 
+			<foreach collection="list" item="userId" open="(" close=")" separator="," index="i">
+				#{userId}
+			</foreach>
+	</select>
+	<!--  动态SQL foreach实现in集合  END-->
+	
+	
+	
+	<!-- 动态SQL foreach实现批量update BEGIN-->
+		<insert id="insertSysUserList"  keyProperty="id" useGeneratedKeys="true">
+			insert into sys_user(
+				user_name, user_password, user_email, 
+				user_info, head_img, create_time)
+			values
+			<foreach collection="list" item="sysUser" separator=",">
+				(
+					#{sysUser.userName}, #{sysUser.userPassword}, #{sysUser.userEmail}, 
+					#{sysUser.userInfo}, #{sysUser.headImg, jdbcType=BLOB},
+					#{sysUser.createTime, jdbcType=TIMESTAMP}
+				)
+			</foreach>
+		</insert>
+	<!-- 动态SQL foreach实现批量update END-->
 
 </mapper>					
