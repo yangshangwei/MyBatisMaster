@@ -318,6 +318,10 @@
 	<!--  动态SQL where  set  END-->
 	
 	<!--  动态SQL foreach实现in集合 BEGIN-->
+<<<<<<< HEAD
+=======
+	
+>>>>>>> 9e32dab3badc281eb8da66d946450bbd60e82088
 	<select id="selectSysUserByIdList" resultType="com.artisan.mybatis.xml.domain.SysUser">
 		SELECT
 			a.id,
@@ -335,8 +339,6 @@
 			</foreach>
 	</select>
 	<!--  动态SQL foreach实现in集合  END-->
-	
-	
 	
 	<!-- 动态SQL foreach实现批量update BEGIN-->
 		<insert id="insertSysUserList"  keyProperty="id" useGeneratedKeys="true">
