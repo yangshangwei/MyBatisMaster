@@ -316,6 +316,10 @@
 	<!--  动态SQL set  END-->
 	
 	<!--  动态SQL foreach实现in集合 BEGIN-->
+<<<<<<< HEAD
+=======
+
+>>>>>>> f0d64f3f8e6d15563722208e832701629ac814a4
 	<select id="selectSysUserByIdList" resultType="com.artisan.mybatis.xml.domain.SysUser">
 		SELECT
 			a.id,
@@ -402,5 +406,4 @@
 		</where>
 	</select>	
 	<!-- bind 用法 END -->
-	
 </mapper>					

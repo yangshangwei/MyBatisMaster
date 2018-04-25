@@ -268,4 +268,5 @@ public interface UserMapper {
 	 */
 	List<SysUser> selectSysUserByAdvancedCondition(SysUser sysUser);
 	// bind用法 END
+
 }
