@@ -234,7 +234,7 @@ public interface UserMapper {
 
 	// 动态SQL foreach实现批量 insert END（仅部分数据库支持）
 
-	// 动态SQL foreach实现动态update
+	// 动态SQL foreach实现动态update BEGIN
 	/**
 	 * 
 	 * 
@@ -250,6 +250,22 @@ public interface UserMapper {
 	void updateSysUserByMap(Map<String, Object> map);
 
 	void updateSysUserByMapWithParam(@Param("userMap") Map<String, Object> map);
-	// 动态SQL foreach实现动态update
 
+	// 动态SQL foreach实现动态update END
+
+	// bind用法 BEGIN
+	/**
+	 * 
+	 * 
+	 * @Title: selectSysUserByAdvancedCondition
+	 * 
+	 * @Description: 演示bind用法
+	 * 
+	 * @param sysUser
+	 * @return
+	 * 
+	 * @return: List<SysUser>
+	 */
+	List<SysUser> selectSysUserByAdvancedCondition(SysUser sysUser);
+	// bind用法 END
 }

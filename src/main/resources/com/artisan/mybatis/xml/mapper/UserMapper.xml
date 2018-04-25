@@ -261,11 +261,9 @@
 			</otherwise>
 		</choose>
 	</select>
-	
 	<!-- 动态SQL之choose when otherwise用法  END -->
 	
-	<!-- 动态SQL where  set  BEGIN-->
-		
+	<!-- 动态SQL where BEGIN-->
 	<select id="selectSysUsersAdvancedWithWhere" resultType="com.artisan.mybatis.xml.domain.SysUser">
 		SELECT
 			a.id,
@@ -285,10 +283,10 @@
 				and user_email = #{userEmail}
 			</if>
 		</where>
-		
 	</select>
+	<!-- 动态SQL where  END-->
 	
-	
+	<!-- 动态SQL set  BEGIN-->
 	<update id="updateSysUserByIdWithSetSelective">
 		update sys_user 
 			<set>
@@ -315,10 +313,9 @@
 			</set>
 			where id = #{id}
 	</update>
-	<!--  动态SQL where  set  END-->
+	<!--  动态SQL set  END-->
 	
 	<!--  动态SQL foreach实现in集合 BEGIN-->
-
 	<select id="selectSysUserByIdList" resultType="com.artisan.mybatis.xml.domain.SysUser">
 		SELECT
 			a.id,
@@ -380,4 +377,30 @@
 		where id = #{userMap.id}
 	</update>
 	<!-- 动态SQL foreach实现动态update END -->
+	
+	<!-- bind 用法 BEGIN --> 
+	<select id="selectSysUserByAdvancedCondition" resultType="com.artisan.mybatis.xml.domain.SysUser">
+		SELECT
+			a.id,
+			a.user_name userName,
+			a.user_password userPassword,
+			a.user_email userEmail,
+			a.user_info userInfo,
+			a.head_img headImg,
+			a.create_time createTime
+		FROM
+			sys_user a
+		<where>
+			<if test="userName != null and userName != '' ">
+				<!-- and user_name like concat('%',#{userName},'%') -->
+				<bind name="userNameLike" value=" '%' + userName + '%' "/>
+					and user_name like #{userNameLike}
+			</if>
+			<if test="userEmail != null and userEmail != '' ">
+				and user_email = #{userEmail}
+			</if>
+		</where>
+	</select>	
+	<!-- bind 用法 END -->
+	
 </mapper>					

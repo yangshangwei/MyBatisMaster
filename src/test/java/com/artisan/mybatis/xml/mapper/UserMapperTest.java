@@ -856,6 +856,78 @@ public class UserMapperTest extends BaseMapperTest {
 		}
 	}
 
+	@Test
+	public void selectSysUserByAdvancedConditionTest() {
+		logger.info("selectSysUserByAdvancedConditionTest");
+		// 获取SqlSession
+		SqlSession sqlSession = getSqlSession();
+
+		List<SysUser> userList = null;
+		try {
+			// 获取UserMapper接口
+			UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+
+			logger.info("===========1.当用户只输入用户名时，需要根据用户名模糊查询===========");
+			// 模拟前台传参 1.当用户只输入用户名时，需要根据用户名模糊查询
+			SysUser sysUser = new SysUser();
+			sysUser.setUserName("ad");
+			// 调用selectSysUserByAdvancedCondition,根据查询条件查询用户
+			userList = userMapper.selectSysUserByAdvancedCondition(sysUser);
+			// 根据数据库sys_user表中的记录,可以匹配到admin, 期望userList不为空
+			Assert.assertNotNull(userList);
+			// 根据查询条件，期望只有1条数据
+			Assert.assertTrue(userList.size() == 1);
+			logger.info("userList:" + userList);
+
+			// 为了测试 匹配多条记录的情况，我们将id=1001这条数据的userName 由test 改为artisan
+			sysUser.setUserName("i");
+			// 调用selectSysUserByAdvancedCondition,根据查询条件查询用户
+			userList = userMapper.selectSysUserByAdvancedCondition(sysUser);
+			// 根据数据库sys_user表中的记录,可以匹配到admin和artisan, 期望userList不为空
+			Assert.assertNotNull(userList);
+			// 根据查询条件，期望只有2条数据
+			Assert.assertTrue(userList.size() == 2);
+
+			logger.info("userList:" + userList);
+
+			logger.info("===========2.当用户只输入邮箱使，根据邮箱进行完全匹配===========");
+			// 模拟前台传参 2.当用户只输入邮箱使，根据邮箱进行完全匹配
+			sysUser.setUserEmail("admin@artisan.com");
+			userList = userMapper.selectSysUsersAdvanced(sysUser);
+			Assert.assertNotNull(userList);
+			Assert.assertTrue(userList.size() == 1);
+			logger.info(userList);
+
+			sysUser.setUserEmail("1admin@artisan.com");
+			userList = userMapper.selectSysUserByAdvancedCondition(sysUser);
+			Assert.assertTrue(userList.size() == 0);
+
+			logger.info("===========3.当用户同时输入用户名和密码时，用这两个条件查询匹配的用户===========");
+
+			// 模拟组合查询条件,存在记录的情况
+			sysUser.setUserName("i");
+			sysUser.setUserEmail("admin@artisan.com");
+			userList = userMapper.selectSysUserByAdvancedCondition(sysUser);
+			Assert.assertNotNull(userList);
+			Assert.assertEquals("admin@artisan.com", sysUser.getUserEmail());
+			Assert.assertTrue(userList.size() == 1);
+			logger.info(userList);
+
+			logger.info("===========4.当用户同时输入无法匹配的用户名和密码===========");
+			// 模拟组合查询条件,不存在记录的情况
+			sysUser.setUserName("x");
+			sysUser.setUserEmail("admin@artisan.com");
+			userList = userMapper.selectSysUserByAdvancedCondition(sysUser);
+			Assert.assertTrue(userList.size() == 0);
+			logger.info(userList);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			sqlSession.close();
+			logger.info("sqlSession close successfully ");
+		}
+	}
 
 }
 
