@@ -316,10 +316,7 @@
 	<!--  动态SQL set  END-->
 	
 	<!--  动态SQL foreach实现in集合 BEGIN-->
-<<<<<<< HEAD
-=======
 
->>>>>>> f0d64f3f8e6d15563722208e832701629ac814a4
 	<select id="selectSysUserByIdList" resultType="com.artisan.mybatis.xml.domain.SysUser">
 		SELECT
 			a.id,
@@ -406,4 +403,32 @@
 		</where>
 	</select>	
 	<!-- bind 用法 END -->
+	
+	<!-- 多数据库的支持 BEGIN -->
+	<select id="selectSysUsersAdvancedMulitDB" resultType="com.artisan.mybatis.xml.domain.SysUser">
+		SELECT
+			a.id,
+			a.user_name userName,
+			a.user_password userPassword,
+			a.user_email userEmail,
+			a.user_info userInfo,
+			a.head_img headImg,
+			a.create_time createTime
+		FROM
+			sys_user a
+		<where>
+			<if test="userName != null and userName != '' ">
+				<if test="_databaseId == 'mysql' ">
+					and user_name like concat('%',#{userName},'%')
+				</if>
+				<if test="_databaseId == 'oracle' ">
+					and user_name like '%'||#{username}||'%'
+				</if>
+			</if>
+			<if test="userEmail != null and userEmail != '' ">
+				and user_email = #{userEmail}
+			</if>
+		</where>
+	</select>
+	<!-- 多数据库的支持 END -->
 </mapper>					

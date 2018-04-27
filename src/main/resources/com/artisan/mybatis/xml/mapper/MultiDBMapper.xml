@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+					"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- 当Mapper接口和XML文件关联的时候， namespace的值就需要配置成接口的全限定名称 -->					
+<mapper namespace="com.artisan.mybatis.xml.mapper.MultiDBMapper">
+	
+	
+	<select id="getSysTime"  resultType="String" databaseId="mysql">
+		select now() from dual
+	</select>
+	
+	 <select id="getSysTime"   resultType="String" databaseId="oracle">
+  		 select  'oralce-'||to_char(sysdate,'yyyy-mm-dd hh24:mi:ss')  from dual 
+ 	 </select>
+	
+</mapper>					

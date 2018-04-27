@@ -4,10 +4,8 @@
         "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
 
-
 	<!-- 引入外部属性文件 ,必须放在第一位-->
-	<properties resource="db_mysql.properties"/>
-
+	<properties resource="db.properties"/>
 	
 	<settings>
 		<!-- 通过logImpl属性指定使用LOG4J输出日志,mybatis默认使用log4j作为输出日志信息。 -->
@@ -16,7 +14,6 @@
 		<setting name="mapUnderscoreToCamelCase" value="true"/>
 		 -->
 	</settings>
-	
 	
 	<!-- typeAliases元素下配置了一个包的别名,通常确定一个类的时候需要使用全限定名,
 		比如 com.artisan.mybatis.simple.mapper.model.Country
@@ -39,7 +36,20 @@
 			</dataSource>
 		</environment>
 	</environments>
-
+	
+	<!-- 多数据库支持 -->
+	<databaseIdProvider  type="DB_VENDOR" >
+        <property  name ="SQL  Server" value="sqlserver"/>
+		<property  name ="DB2" value ="db2"/>
+		<property  name ="Oracle" value ="oracle"/>
+		<property  name ="MySQL" value ="mysql"/>
+		<property  name ="PostgreSQL" value ="postgresql"/>
+		<property  name ="Derby" value ="derby"/>
+		<property  name ="HSQL" value ="hsqldb"/>
+		<property  name ="H2" value ="h2"/>
+    </databaseIdProvider>
+	
+	
 	<mappers>
 		<!-- 配置具体的mapper -->
 		<mapper resource="com/artisan/mybatis/simple/mapper/CountryMapper.xml" />

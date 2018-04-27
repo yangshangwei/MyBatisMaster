@@ -3,5 +3,4 @@
 					"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <!-- 当Mapper接口和XML文件关联的时候， namespace的值就需要配置成接口的全限定名称 -->					
 <mapper namespace="com.artisan.mybatis.xml.mapper.RoleMapper">
-
 </mapper>					

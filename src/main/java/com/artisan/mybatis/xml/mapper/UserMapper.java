@@ -267,6 +267,22 @@ public interface UserMapper {
 	 * @return: List<SysUser>
 	 */
 	List<SysUser> selectSysUserByAdvancedCondition(SysUser sysUser);
+
 	// bind用法 END
+
+	// 多数据库支持
+	/**
+	 * 
+	 * 
+	 * @Title: selectSysUsersAdvancedMulitDB
+	 * 
+	 * @Description: selectSysUsersAdvancedMulitDB
+	 * 
+	 * @param sysUser
+	 * @return
+	 * 
+	 * @return: List<SysUser>
+	 */
+	List<SysUser> selectSysUsersAdvancedMulitDB(SysUser sysUser);
 
 }
