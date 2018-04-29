@@ -53,7 +53,7 @@
 	<mappers>
 		<!-- 配置具体的mapper -->
 		<mapper resource="com/artisan/mybatis/simple/mapper/CountryMapper.xml" />
-		
+		<mapper resource="example/xml/CountryMapper.xml"/>
 		<!-- 逐一配置，比较繁琐，容易遗漏，接口方式不推荐
 		<mapper resource="com/artisan/mybatis/xml/mapper/UserMapper.xml"/>
 		<mapper resource="com/artisan/mybatis/xml/mapper/UserRoleMapper.xml"/>

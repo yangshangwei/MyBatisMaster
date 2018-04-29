@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<!-- 配置生成器 -->
+<generatorConfiguration> 
+	 <!-- 引用外部配置文件 -->
+	 <properties resource="db.properties" />
+	<!-- 
+		在MBG工作的时候，需要额外加载的依赖包location属性指明加载jar/zip包的全路径 -->
+	<!--
+		<classPathEntry location="F:\.m2\repository\mysql\mysql-connector-java\5.1.38\mysql-connector-java-5.1.38.jar"/>
+	 -->
+	 
+    <context id="MySqlContext" targetRuntime="MyBatis3" defaultModelType="flat">
+    	<!-- beginningDelimiter/endingDelimiter: 指明数据库的用于标记数据库对象名的符号，比如ORACLE是双引号，MYSQL默认是`反引号  -->
+        <property name="beginningDelimiter" value="`"/>
+        <property name="endingDelimiter" value="`"/>
+        <!-- 生成的Java文件的编码 -->
+        <property name="javaFileEncoding" value="UTF-8"/>
+        <commentGenerator>
+        	<!-- suppressDate是去掉生成日期那行注释，suppressAllComments是去掉所有的注解 -->
+            <property name="suppressDate" value="true"/>
+            <!-- 在生成的实体类中附带表字段的注释  MBG1.3.3中新增的功能 -->
+            <property name="addRemarkComments" value="true"/>
+        </commentGenerator>
+	
+	
+		<!-- 必须存在，使用这个配置链接数据库-->
+        <jdbcConnection driverClass="${jdbc.driver}"
+                        connectionURL="${jdbc.url}"
+                        userId="${jdbc.username}"
+                        password="${jdbc.password}">
+              <!-- 这里面可以设置property属性，每一个property属性都设置到配置的Driver上 -->
+        </jdbcConnection>
+
+        <javaModelGenerator targetPackage="example.model" targetProject="src\main\java">
+			<!-- 设置是否在getter方法中，对String类型字段调用trim()方法 -->
+			<property name="trimStrings" value="true" />
+        </javaModelGenerator>
+		
+		
+        <sqlMapGenerator targetPackage="example.xml"  targetProject="src\main\resources">
+        </sqlMapGenerator>
+        
+        <javaClientGenerator type="XMLMAPPER" targetPackage="example.dao"  targetProject="src\main\java">
+        </javaClientGenerator>
+        
+        <table tableName="country">
+            <generatedKey column="id" sqlStatement="MySql"/>
+        </table>
+     </context>
+</generatorConfiguration>
