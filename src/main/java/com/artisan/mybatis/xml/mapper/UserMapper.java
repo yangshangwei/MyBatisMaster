@@ -270,7 +270,7 @@ public interface UserMapper {
 
 	// bind用法 END
 
-	// 多数据库支持
+	// 多数据库支持 Begin
 	/**
 	 * 
 	 * 
@@ -284,5 +284,24 @@ public interface UserMapper {
 	 * @return: List<SysUser>
 	 */
 	List<SysUser> selectSysUsersAdvancedMulitDB(SysUser sysUser);
+
+	// 多数据库支持 End
+
+	// 一对一映射 Begin
+	/**
+	 * 
+	 * 
+	 * @Title: selectSysUserAndSysRoleById
+	 * 
+	 * @Description: 根据Id查询用户信息的同时获取用户拥有的角色信息
+	 * 
+	 * @param id
+	 * @return
+	 * 
+	 * @return: SysUser
+	 */
+	SysUser selectSysUserAndSysRoleById(Long id);
+
+	// 一对一映射 End
 
 }
