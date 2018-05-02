@@ -17,6 +17,66 @@
 		<result property="createTime" column="create_time" jdbcType="TIMESTAMP" />
 	</resultMap>
 	
+	<!-- 使用resultMap配置一对一映射 -->
+	<resultMap id="userRoleMap" 
+			   type="com.artisan.mybatis.xml.domain.SysUser">
+		<id column="id" property="id" />
+		<result property="userName" column="user_name" />
+		<result property="userPassword" column="user_password" />
+		<result property="userEmail" column="user_email" />
+		<result property="userInfo" column="user_info" />
+		<result property="headImg" column="head_img" jdbcType="BLOB" />
+		<result property="createTime" column="create_time" jdbcType="TIMESTAMP" />
+		<!-- sysRole相关的属性 -->
+		<result property="sysRole.id" column="role_id"/>
+		<result property="sysRole.roleName" column="role_name"/>
+		<result property="sysRole.enabled" column="enabled"/>
+		<result property="sysRole.createBy" column="create_by"/>
+		<result property="sysRole.createTime" column="role_create_time" jdbcType="TIMESTAMP"/>
+	</resultMap>
+	
+	<!-- 使用resultMap配置一对一映射  继承原有的resultMap -->
+	<resultMap id="userRoleMap_byExtends"  extends="userMap"
+			   type="com.artisan.mybatis.xml.domain.SysUser">
+		<!-- sysRole相关的属性 -->
+		<result property="sysRole.id" column="role_id"/>
+		<result property="sysRole.roleName" column="role_name"/>
+		<result property="sysRole.enabled" column="enabled"/>
+		<result property="sysRole.createBy" column="create_by"/>
+		<result property="sysRole.createTime" column="role_create_time" jdbcType="TIMESTAMP"/>
+	</resultMap>
+	
+	
+	<!-- 使用resultMap配置一对一映射  使用association -->
+	<resultMap id="userRoleMap_byExtendsAndAssociation"  extends="userMap"
+			   type="com.artisan.mybatis.xml.domain.SysUser">
+		<association property="sysRole" columnPrefix="sysRole_"
+			javaType="com.artisan.mybatis.xml.domain.SysRole">
+			<result property="id" column="id"/>
+			<result property="roleName" column="role_name"/>
+			<result property="enabled" column="enabled"/>
+			<result property="createBy" column="create_by"/>
+			<result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+		</association>	   
+	</resultMap>
+	
+	
+	<!-- 使用resultMap配置一对一映射  使用association -->
+	<resultMap id="roleMap"  type="com.artisan.mybatis.xml.domain.SysRole" >
+		<result property="id" column="id"/>
+		<result property="roleName" column="role_name"/>
+		<result property="enabled" column="enabled"/>
+		<result property="createBy" column="create_by"/>
+		<result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+	</resultMap>
+	
+	<resultMap id="userRoleMap_byExtendsAndAssociation_ResultMap"  extends="userMap"
+			   type="com.artisan.mybatis.xml.domain.SysUser">
+		<association property="sysRole" columnPrefix="sysRole_"
+			javaType="com.artisan.mybatis.xml.domain.SysRole" resultMap="roleMap">
+		</association>	   
+	</resultMap>
+	
 	<!-- 通过ID查询系统用户 -->
 	<select id="selectSysUserById" parameterType="Long" resultMap="userMap">
 		select
@@ -51,7 +111,6 @@
 
 
 	<!-- 
-		
 		在数据库中，由于大部分数据库设置不区分大小写，一次下画线方式的命名很常见，比如user_name, user_email .
 		 在Java中，一般都是用驼峰式命名，比如userName,userEmail 
 		 
@@ -433,12 +492,15 @@
 	<!-- 多数据库的支持 END -->
 	
 	<!-- 一对一映射 Begin -->
+	
+	<!-- 使用自动映射处理一对一映射 -->
 	<select id="selectSysUserAndSysRoleById" resultType="com.artisan.mybatis.xml.domain.SysUser">
 		SELECT
 			u.id,
 			u.user_name userName,
 			u.user_password userPassword,
 			u.user_email userEmail,
+			u.user_info userInfo,
 			u.create_time createTime,
 			u.head_img headImg,
 			r.id "sysRole.id",
@@ -453,6 +515,102 @@
 		WHERE
 			u.id = #{id}
 	</select>
+	
+	<!-- 使用resultMap配置一对一映射 resultMap方式-->
+	<select id="selectSysUserAndSysRoleById2" resultMap="userRoleMap">
+		SELECT
+			u.id,
+			u.user_name ,
+			u.user_password ,
+			u.user_email ,
+			u.user_info ,
+			u.create_time ,
+			u.head_img ,
+			r.id role_id,
+			r.role_name ,
+			r.enabled ,
+			r.create_by ,
+			r.create_time role_create_time 
+		FROM
+			sys_user u
+		INNER JOIN sys_user_role ur ON u.id = ur.user_id
+		INNER JOIN sys_role r ON ur.role_id = r.id
+		WHERE
+			u.id = #{id}
+	</select>
+	
+	
+	<!-- 使用resultMap配置一对一映射 resultMap方式  继承原有的resultMap-->
+	<select id="selectSysUserAndSysRoleById3" resultMap="userRoleMap_byExtends">
+		SELECT
+			u.id,
+			u.user_name ,
+			u.user_password ,
+			u.user_email ,
+			u.user_info ,
+			u.create_time ,
+			u.head_img ,
+			r.id role_id,
+			r.role_name ,
+			r.enabled ,
+			r.create_by ,
+			r.create_time role_create_time 
+		FROM
+			sys_user u
+		INNER JOIN sys_user_role ur ON u.id = ur.user_id
+		INNER JOIN sys_role r ON ur.role_id = r.id
+		WHERE
+			u.id = #{id}
+	</select>
+	
+	
+	<!-- 使用resultMap配置一对一映射 result中Map中使用association  -->
+	<select id="selectSysUserAndSysRoleById4" resultMap="userRoleMap_byExtendsAndAssociation">
+		SELECT
+			u.id,
+			u.user_name ,
+			u.user_password ,
+			u.user_email ,
+			u.user_info ,
+			u.create_time ,
+			u.head_img ,
+			r.id sysRole_id,
+			r.role_name sysRole_role_name,
+			r.enabled sysRole_enabled,
+			r.create_by sysRole_create_by,
+			r.create_time sysRole_create_time
+		FROM
+			sys_user u
+		INNER JOIN sys_user_role ur ON u.id = ur.user_id
+		INNER JOIN sys_role r ON ur.role_id = r.id
+		WHERE
+			u.id = #{id}
+	</select>
+	
+	<!-- 使用resultMap配置一对一映射 result中Map中使用association,association引用resultMap  -->
+	<select id="selectSysUserAndSysRoleById5" resultMap="userRoleMap_byExtendsAndAssociation_ResultMap">
+		SELECT
+			u.id,
+			u.user_name ,
+			u.user_password ,
+			u.user_email ,
+			u.user_info ,
+			u.create_time ,
+			u.head_img ,
+			r.id sysRole_id,
+			r.role_name sysRole_role_name,
+			r.enabled sysRole_enabled,
+			r.create_by sysRole_create_by,
+			r.create_time sysRole_create_time
+		FROM
+			sys_user u
+		INNER JOIN sys_user_role ur ON u.id = ur.user_id
+		INNER JOIN sys_role r ON ur.role_id = r.id
+		WHERE
+			u.id = #{id}
+	</select>
+	
+	
 	<!-- 一对一映射 End -->
 	
 </mapper>					

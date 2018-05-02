@@ -300,7 +300,20 @@ public interface UserMapper {
 	 * 
 	 * @return: SysUser
 	 */
+	// 使用自动映射处理一对一映射
 	SysUser selectSysUserAndSysRoleById(Long id);
+
+	// 使用resultMap配置一对一映射
+	SysUser selectSysUserAndSysRoleById2(Long id);
+
+	// 使用resultMap配置一对一映射 继承resultMap
+	SysUser selectSysUserAndSysRoleById3(Long id);
+
+	// 使用resultMap配置一对一映射 resultMap association
+	SysUser selectSysUserAndSysRoleById4(Long id);
+
+	// 使用resultMap配置一对一映射 resultMap association中引用resultMap
+	SysUser selectSysUserAndSysRoleById5(Long id);
 
 	// 一对一映射 End
 

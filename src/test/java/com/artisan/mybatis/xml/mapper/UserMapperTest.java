@@ -1027,8 +1027,106 @@ public class UserMapperTest extends BaseMapperTest {
 		}
 	}
 	
+	@Test
+	public void selectSysUserAndSysRoleById2Test() {
+		logger.info("selectSysUserAndSysRoleById2Test");
+		// 获取SqlSession
+		SqlSession sqlSession = getSqlSession();
+		try {
+			// 获取UserMapper接口
+			UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+			// 注意:数据库中id=1的用户拥有2个角色，不适合这个例子。
+			// 调用selectSysUserAndSysRoleById2方法，查询id=1001的用户及其角色
+			SysUser sysUser = userMapper.selectSysUserAndSysRoleById2(1001L);
+			// 期望用户不为空
+			Assert.assertNotNull(sysUser);
+			// 期望角色不为空
+			Assert.assertNotNull(sysUser.getSysRole());
+
+			logger.info(sysUser);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			sqlSession.close();
+			logger.info("sqlSession close successfully ");
+		}
+	}
 	
 	
+	@Test
+	public void selectSysUserAndSysRoleById3Test() {
+		logger.info("selectSysUserAndSysRoleById3Test");
+		// 获取SqlSession
+		SqlSession sqlSession = getSqlSession();
+		try {
+			// 获取UserMapper接口
+			UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+			// 注意:数据库中id=1的用户拥有2个角色，不适合这个例子。
+			// 调用selectSysUserAndSysRoleById3方法，查询id=1001的用户及其角色
+			SysUser sysUser = userMapper.selectSysUserAndSysRoleById3(1001L);
+			// 期望用户不为空
+			Assert.assertNotNull(sysUser);
+			// 期望角色不为空
+			Assert.assertNotNull(sysUser.getSysRole());
+
+			logger.info(sysUser);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			sqlSession.close();
+			logger.info("sqlSession close successfully ");
+		}
+	}
+
+	@Test
+	public void selectSysUserAndSysRoleById4Test() {
+		logger.info("selectSysUserAndSysRoleById4Test");
+		// 获取SqlSession
+		SqlSession sqlSession = getSqlSession();
+		try {
+			// 获取UserMapper接口
+			UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+			// 注意:数据库中id=1的用户拥有2个角色，不适合这个例子。
+			// 调用selectSysUserAndSysRoleById4方法，查询id=1001的用户及其角色
+			SysUser sysUser = userMapper.selectSysUserAndSysRoleById4(1001L);
+			// 期望用户不为空
+			Assert.assertNotNull(sysUser);
+			// 期望角色不为空
+			Assert.assertNotNull(sysUser.getSysRole());
+
+			logger.info(sysUser);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			sqlSession.close();
+			logger.info("sqlSession close successfully ");
+		}
+	}
+
+	@Test
+	public void selectSysUserAndSysRoleById5Test() {
+		logger.info("selectSysUserAndSysRoleById5Test");
+		// 获取SqlSession
+		SqlSession sqlSession = getSqlSession();
+		try {
+			// 获取UserMapper接口
+			UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+			// 注意:数据库中id=1的用户拥有2个角色，不适合这个例子。
+			// 调用selectSysUserAndSysRoleById5方法，查询id=1001的用户及其角色
+			SysUser sysUser = userMapper.selectSysUserAndSysRoleById5(1001L);
+			// 期望用户不为空
+			Assert.assertNotNull(sysUser);
+			// 期望角色不为空
+			Assert.assertNotNull(sysUser.getSysRole());
+
+			logger.info(sysUser);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			sqlSession.close();
+			logger.info("sqlSession close successfully ");
+		}
+	}
 	
 }
 
