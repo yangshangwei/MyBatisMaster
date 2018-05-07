@@ -21,4 +21,18 @@ public interface PrivilegeMapper {
 	@SelectProvider(type = PrivilegeProvider.class, method = "selectSysPrivilegeById")
 	SysPrivilege selectSysPrivilegeById(Long id);
 
+	/**
+	 * 
+	 * 
+	 * @Title: selectPrivilegeByIdWithCache
+	 * 
+	 * @Description: 二级缓存测试方法 ,实体类SysPrivilege必须要实现Serializable
+	 * 
+	 * @param id
+	 * @return
+	 * 
+	 * @return: SysPrivilege
+	 */
+	SysPrivilege selectPrivilegeByIdWithCache(Long id);
+
 }

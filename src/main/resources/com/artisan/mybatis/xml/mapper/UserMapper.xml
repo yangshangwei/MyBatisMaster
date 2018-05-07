@@ -8,7 +8,7 @@
 	<!-- 通过resultMap标签配置Java对象和查询结果列的对应关系 -->
 	<resultMap id="userMap" 
 			   type="com.artisan.mybatis.xml.domain.SysUser">
-		<id column="id" property="id" />
+		<id property="id" column="id"  />
 		<result property="userName" column="user_name" />
 		<result property="userPassword" column="user_password" />
 		<result property="userEmail" column="user_email" />
@@ -63,7 +63,7 @@
 	
 	<!-- 使用resultMap配置一对一映射  使用association -->
 	<resultMap id="roleMap"  type="com.artisan.mybatis.xml.domain.SysRole" >
-		<result property="id" column="id"/>
+		<id  property="id" column="id"/>
 		<result property="roleName" column="role_name"/>
 		<result property="enabled" column="enabled"/>
 		<result property="createBy" column="create_by"/>
@@ -76,6 +76,31 @@
 			javaType="com.artisan.mybatis.xml.domain.SysRole" resultMap="roleMap">
 		</association>	   
 	</resultMap>
+	
+	
+	
+	<!-- 使用resultMap配置一对多映射 Begin -->
+	
+	<!-- 简化的配置 -->
+	<resultMap id="userRoleListMap" extends="userMap"
+			   type="com.artisan.mybatis.xml.domain.SysUser" >
+		<!-- sysRole相关的属性   property 对应实体类List<SysRole>属性名-->
+		<collection property="roleList" columnPrefix="sysRole_"
+			resultMap="roleMap">
+		</collection>
+	</resultMap>
+	
+	<!-- 两级嵌套查询,查询用户的角色以及角色对应的权限 -->
+	<resultMap id="userRoleAndPrivilegeListMap" extends="userMap"
+			   type="com.artisan.mybatis.xml.domain.SysUser" >
+		<collection property="roleList" columnPrefix="sysRole_"
+			resultMap="com.artisan.mybatis.xml.mapper.RoleMapper.rolePrivilegeListMap">
+		</collection>
+	</resultMap>
+	
+	
+	
+	<!-- 使用resultMap配置一对多映射 End -->
 	
 	<!-- 通过ID查询系统用户 -->
 	<select id="selectSysUserById" parameterType="Long" resultMap="userMap">
@@ -609,6 +634,57 @@
 		WHERE
 			u.id = #{id}
 	</select>
+	
+	
+	<!-- 一对一映射 End -->
+	
+	<!-- 一对多映射 Begin -->
+	<select id="selectAllUserAndRoles" resultMap="userRoleListMap">
+		SELECT
+			u.id,
+			u.user_name ,
+			u.user_password ,
+			u.user_email ,
+			u.user_info ,
+			u.create_time ,
+			u.head_img ,
+			r.id sysRole_id,
+			r.role_name sysRole_role_name,
+			r.enabled sysRole_enabled,
+			r.create_by sysRole_create_by,
+			r.create_time sysRole_create_time
+		FROM
+			sys_user u
+		INNER JOIN sys_user_role ur ON u.id = ur.user_id
+		INNER JOIN sys_role r ON ur.role_id = r.id
+	</select>
+	
+	
+	
+	<select id="selectAllUserAndRolesAndPrivileges" resultMap="userRoleAndPrivilegeListMap">
+	    select 
+	    	u.id, 
+	    	u.user_name, 
+	        u.user_password,
+	        u.user_email,
+	        u.user_info,
+	        u.head_img,
+	        u.create_time,
+	        r.id sysRole_id,
+			r.role_name sysRole_role_name, 
+			r.enabled sysRole_enabled,
+			r.create_by sysRole_create_by,
+			r.create_time sysRole_create_time,
+			p.id sysRole_privilege_id,
+			p.privilege_name sysRole_privilege_privilege_name,
+			p.privilege_url sysRole_privilege_privilege_url
+		from sys_user u
+		inner join sys_user_role ur on u.id = ur.user_id
+		inner join sys_role r on ur.role_id = r.id
+		inner join sys_role_privilege rp on rp.role_id = r.id
+		inner join sys_privilege p on p.id = rp.privilege_id
+	</select>
+	
 	
 	
 	<!-- 一对一映射 End -->

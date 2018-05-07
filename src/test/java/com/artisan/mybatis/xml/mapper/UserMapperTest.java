@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.artisan.mybatis.xml.domain.SysPrivilege;
 import com.artisan.mybatis.xml.domain.SysRole;
 import com.artisan.mybatis.xml.domain.SysUser;
 
@@ -1128,5 +1129,68 @@ public class UserMapperTest extends BaseMapperTest {
 		}
 	}
 	
+	@Test
+	public void selectAllUserAndRolesTest() {
+		logger.info("selectAllUserAndRolesTest");
+		// 获取SqlSession
+		SqlSession sqlSession = getSqlSession();
+		try {
+			// 获取UserMapper接口
+			UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+			// 调用selectAll,查询全部用户
+			List<SysUser> userList = userMapper.selectAllUserAndRoles();
+			// 结果不为空
+			Assert.assertNotNull(userList);
+			// 结果大于0
+			Assert.assertTrue(userList.size() > 0);
+
+			logger.info("userList总数为:" + userList.size());
+			for (SysUser sysUser : userList) {
+				logger.info("用户名:" + sysUser.getUserName());
+				for (SysRole sysRole : sysUser.getRoleList()) {
+					logger.info("\t角色名:" + sysRole.getRoleName());
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			sqlSession.close();
+			logger.info("sqlSession close successfully ");
+		}
+	}
+
+	@Test
+	public void selectAllUserAndRolesAndPrivilegesTest() {
+		logger.info("selectAllUserAndRolesAndPrivilegesTest");
+		// 获取SqlSession
+		SqlSession sqlSession = getSqlSession();
+		try {
+			// 获取UserMapper接口
+			UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+			// 调用selectAll,查询全部用户
+			List<SysUser> userList = userMapper.selectAllUserAndRolesAndPrivileges();
+			// 结果不为空
+			Assert.assertNotNull(userList);
+			// 结果大于0
+			Assert.assertTrue(userList.size() > 0);
+
+			logger.info("userList总数为:" + userList.size());
+			for (SysUser sysUser : userList) {
+				logger.info("用户名:" + sysUser.getUserName());
+				for (SysRole sysRole : sysUser.getRoleList()) {
+					logger.info("\t角色名:" + sysRole.getRoleName());
+					for (SysPrivilege sysPrivilege : sysRole.getPrivilegeList()) {
+						logger.info("\t\t权限名:" + sysPrivilege.getPrivilegeName());
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			sqlSession.close();
+			logger.info("sqlSession close successfully ");
+		}
+	}
+
 }
 

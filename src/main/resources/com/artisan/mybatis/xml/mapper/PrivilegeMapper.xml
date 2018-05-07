@@ -1,8 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 					"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-					
-<!-- 当Mapper接口和XML文件关联的时候， namespace的值就需要配置成接口的全限定名称 -->					
-<mapper namespace="com.artisan.mybatis.xml.mapper.PrivilegeMapper">
 
+<!-- 当Mapper接口和XML文件关联的时候， namespace的值就需要配置成接口的全限定名称 -->
+<mapper namespace="com.artisan.mybatis.xml.mapper.PrivilegeMapper">
+	<!-- 在全局配置文件开启二级缓存的前提下,给Privilege开启二级缓存，使用默认配置 -->
+	<cache/>
+	
+	
+	<resultMap id="privilegeMap" type="com.artisan.mybatis.xml.domain.SysPrivilege">
+		<id property="id" column="id" />
+		<result property="privilegeName" column="privilege_name" />
+		<result property="privilegeUrl" column="privilege_url" />
+	</resultMap>
+	
+	
+	<select id="selectPrivilegeByIdWithCache"  resultType="com.artisan.mybatis.xml.domain.SysPrivilege">
+		SELECT
+			id,
+			privilege_name privilegeName,
+			privilege_url privilegeUrl
+		FROM
+			sys_privilege
+		WHERE
+			id = #{id}
+	</select>
+	
+	
+	
 </mapper>				

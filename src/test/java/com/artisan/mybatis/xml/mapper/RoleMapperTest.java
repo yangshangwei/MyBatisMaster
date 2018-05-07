@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.artisan.mybatis.xml.domain.SysPrivilege;
 import com.artisan.mybatis.xml.domain.SysRole;
 
 public class RoleMapperTest extends BaseMapperTest {
@@ -302,4 +303,32 @@ public class RoleMapperTest extends BaseMapperTest {
 			logger.info("sqlSession close successfully ");
 		}
 	}
+
+	@Test
+	public void selectAllRoleAndPrivilegesTest() {
+		logger.info("selectAllRoleAndPrivilegesTest");
+		try {
+			// 获取SqlSession
+			sqlSession = getSqlSession();
+			// 获取接口
+			RoleMapper roleMapper = sqlSession.getMapper(RoleMapper.class);
+			// 调用接口方法
+			List<SysRole> sysRoleList = roleMapper.selectAllRoleAndPrivileges();
+			// 期待不为空
+			Assert.assertNotNull(sysRoleList);
+			// 期望为sysRoleList > 0
+			Assert.assertTrue(sysRoleList.size() > 0);
+
+			for (SysRole sysRole : sysRoleList) {
+				logger.info("RoleName:" + sysRole.getRoleName());
+				for (SysPrivilege sysPrivilege : sysRole.getPrivilegeList()) {
+					logger.info("\tPrivilege:" + sysPrivilege.getPrivilegeName());
+				}
+			}
+		} finally {
+			sqlSession.close();
+			logger.info("sqlSession close successfully");
+		}
+	}
+
 }

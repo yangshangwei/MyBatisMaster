@@ -206,4 +206,17 @@ public interface RoleMapper {
 	@Delete("delete from sys_role where id = #{id}")
 	int deleteSysRoleById(Long id);
 
+	/**
+	 * 
+	 * 
+	 * @Title: selectAllRoleAndPrivileges
+	 * 
+	 * @Description: 查询全部角色对应的权限
+	 * 
+	 * @return
+	 * 
+	 * @return: List<SysRole>
+	 */
+	List<SysRole> selectAllRoleAndPrivileges();
+
 }	

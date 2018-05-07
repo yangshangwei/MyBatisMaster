@@ -317,4 +317,33 @@ public interface UserMapper {
 
 	// 一对一映射 End
 
+	// 一对多 Begin
+	/**
+	 * 
+	 * 
+	 * @Title: selectAllUserAndRoles
+	 * 
+	 * @Description:获取所有用户及对应的角色
+	 * 
+	 * @return
+	 * 
+	 * @return: List<SysUser>
+	 */
+	List<SysUser> selectAllUserAndRoles();
+
+	/**
+	 * 
+	 * 
+	 * @Title: selectAllUserAndRolesAndPrivileges
+	 * 
+	 * @Description: 获取所有用户对应的角色以及权限集合
+	 * 
+	 * @return
+	 * 
+	 * @return: List<SysUser>
+	 */
+	List<SysUser> selectAllUserAndRolesAndPrivileges();
+
+	// 一对多 End
+
 }

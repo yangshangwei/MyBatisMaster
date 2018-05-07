@@ -3,6 +3,7 @@ package com.artisan.mybatis.xml.domain;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 
@@ -58,6 +59,19 @@ public class SysUser implements Serializable {
 	 * 用户角色: 一个用户拥有一个角色 ， 一对一
 	 */
 	private SysRole sysRole;
+
+	/**
+	 * 用户角色: 一个用户拥有多个角色 ， 一对多
+	 */
+	private List<SysRole> roleList;
+
+	public List<SysRole> getRoleList() {
+		return roleList;
+	}
+
+	public void setRoleList(List<SysRole> roleList) {
+		this.roleList = roleList;
+	}
 
 	public Long getId() {
 		return id;

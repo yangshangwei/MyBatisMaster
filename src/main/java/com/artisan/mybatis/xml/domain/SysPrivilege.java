@@ -7,7 +7,7 @@ import java.io.Serializable;
  * 
  * @ClassName: SysPrivilege
  * 
- * @Description: 权限表
+ * @Description: 权限表 ,使用二级缓存必须实现Serializable
  * 
  * @author: Mr.Yang
  * 

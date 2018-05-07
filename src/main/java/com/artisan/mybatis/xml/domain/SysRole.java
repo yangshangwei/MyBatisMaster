@@ -38,18 +38,10 @@ public class SysRole implements Serializable {
 	 */
 	private Date createTime;
 
-
 	/**
-	 * 用户信息
-	 */
-	private SysUser user;
-
-	/**
-	 * 角色包含的权限列表
+	 * 一对多，权限集合
 	 */
 	List<SysPrivilege> privilegeList;
-
-
 
 	/**
 	 * 
@@ -57,8 +49,17 @@ public class SysRole implements Serializable {
 	 *
 	 */
 
+
 	public Long getId() {
 		return id;
+	}
+
+	public List<SysPrivilege> getPrivilegeList() {
+		return privilegeList;
+	}
+
+	public void setPrivilegeList(List<SysPrivilege> privilegeList) {
+		this.privilegeList = privilegeList;
 	}
 
 	public void setId(Long id) {
@@ -97,27 +98,9 @@ public class SysRole implements Serializable {
 		this.createTime = createTime;
 	}
 
-	public SysUser getUser() {
-		return user;
-	}
-
-	public void setUser(SysUser user) {
-		this.user = user;
-	}
-
-
-	public List<SysPrivilege> getPrivilegeList() {
-		return privilegeList;
-	}
-
-	public void setPrivilegeList(List<SysPrivilege> privilegeList) {
-		this.privilegeList = privilegeList;
-	}
-
 	@Override
 	public String toString() {
-		return "SysRole [id=" + id + ", roleName=" + roleName + ", enabled=" + enabled + ", createBy=" + createBy + ", createTime=" + createTime + ", user=" + user + ", privilegeList="
-				+ privilegeList + "]";
+		return "SysRole [id=" + id + ", roleName=" + roleName + ", enabled=" + enabled + ", createBy=" + createBy + ", createTime=" + createTime + ", privilegeList=" + privilegeList + "]";
 	}
 
 
